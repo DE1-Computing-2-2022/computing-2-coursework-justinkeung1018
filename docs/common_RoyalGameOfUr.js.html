@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>common/RoyalGameOfUr.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="RoyalGameOfUr.html">RoyalGameOfUr</a><ul class='methods'><li data-type='method'><a href="RoyalGameOfUr.html#.createBoard">createBoard</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.pieceHasValidMoves">pieceHasValidMoves</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.pieceLandedOnRosette">pieceLandedOnRosette</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.piecesAtHome">piecesAtHome</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.playerHasValidMoves">playerHasValidMoves</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.rollDice">rollDice</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.tileIsEmpty">tileIsEmpty</a></li><li data-type='method'><a href="RoyalGameOfUr.html#.tileIsRosette">tileIsRosette</a></li></ul></li><li><a href="Stats4.html">Stats4</a><ul class='methods'><li data-type='method'><a href="Stats4.html#.get_statistics">get_statistics</a></li><li data-type='method'><a href="Stats4.html#.record_game">record_game</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">common/RoyalGameOfUr.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import R from "../common/ramda.js";
+/**
+ * RoyalGameOfUr.js is a module to play the Royal Game of Ur, an ancient
+ * two-player Mesopotamian board game dating back to 300 BC.
+ * @namespace RoyalGameOfUr
+ * @author Justin Keung
+ * @version 1.0
+ */
+
+const RoyalGameOfUr = Object.create(null);
+
+const WIDTH = 8;
+const HEIGHT = 3;
+const PIECES_PER_PLAYER = 7;
+
+const COMBAT_ZONE = [
+    [0, 1],
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [4, 1],
+    [5, 1],
+    [6, 1],
+    [7, 1]
+];
+
+const PLAYER_1_PATH = [
+    [4, 0], // One tile before the starting tile of player 1
+    [3, 0],
+    [2, 0],
+    [1, 0],
+    [0, 0],
+    ...COMBAT_ZONE,
+    [7, 0],
+    [6, 0],
+    [5, 0] // One tile after the finishing tile of player 1
+];
+
+const PLAYER_2_PATH = [
+    [4, 2], // One tile before the starting tile of player 2
+    [3, 2],
+    [2, 2],
+    [1, 2],
+    [0, 2],
+    ...COMBAT_ZONE,
+    [7, 2],
+    [6, 2],
+    [5, 2] // One tile after the finishing tile of player 2
+];
+
+const ROSETTE_TILES = [
+    [0, 0],
+    [0, 2],
+    [3, 1],
+    [6, 0],
+    [6, 2]
+];
+
+const EMPTY_TILES = [
+    PLAYER_1_PATH[0],
+    PLAYER_1_PATH[PLAYER_1_PATH.length - 1],
+    PLAYER_2_PATH[0],
+    PLAYER_2_PATH[PLAYER_2_PATH.length - 1]
+];
+
+const PLAYER_1_INITIAL_PIECES = new Array(PIECES_PER_PLAYER)
+.fill(PLAYER_1_PATH[0]);
+const PLAYER_2_INITIAL_PIECES = new Array(PIECES_PER_PLAYER)
+.fill(PLAYER_2_PATH[0]);
+const ALL_PLAYERS_INITIAL_PIECES = [
+    PLAYER_1_INITIAL_PIECES,
+    PLAYER_2_INITIAL_PIECES
+];
+
+/**
+ * Creates an empty Royal Game of Ur board.
+ * @param {number[][][]} allPlayersPieces Array containing two arrays storing
+ * the locations of each player's pieces.
+ * @param {number} playerToPly The player to ply. Default set to be player 1.
+ * @returns {Object} A board object containing information about each player's
+ * pieces, as well as which player is making the ply.
+ */
+
+RoyalGameOfUr.createBoard = function (
+    allPlayersPieces = ALL_PLAYERS_INITIAL_PIECES,
+    playerToPly = 1
+) {
+    const board = {};
+    allPlayersPieces.forEach(function (playerPieces, playerIndex) {
+        const playerID = playerIndex + 1; // 0 indexing
+        board[playerID] = playerPieces;
+    });
+    board.playerToPly = playerToPly;
+    board.ROSETTE_TILES = ROSETTE_TILES;
+    board.COMBAT_ZONE = COMBAT_ZONE;
+    board.EMPTY_TILES = EMPTY_TILES;
+    return board;
+};
+
+/**
+ * Determines if the player has any valid moves.
+ * @param {number} playerID Either 1 or 2 for games with two players.
+ * @param {number} totalDiceValue Number rolled by the dice.
+ * @param {Object} board Current board to be examined.
+ * @returns {boolean} Whether the player has any valid moves.
+ */
+RoyalGameOfUr.playerHasValidMoves = function (playerID, totalDiceValue, board) {
+    if (totalDiceValue === 0) {
+        return false;
+    }
+    const playerPieces = board[playerID];
+    return playerPieces.some(function (piece) {
+        return RoyalGameOfUr.pieceHasValidMoves(
+            playerID,
+            totalDiceValue,
+            piece,
+            board
+        );
+    });
+};
+
+// Assume piece is on a valid location and belongs to the player making the ply.
+// TODO: implement unit test for this.
+
+/**
+ * Determines if the player can move a particular piece.
+ * @param {number} playerID Either 1 or 2 for games with two players.
+ * @param {number} totalDiceValue Number rolled by the dice.
+ * @param {number[]} piece Piece to be examined, represented by its location.
+ * @param {Object} board Current board to be examined.
+ * @returns {boolean} Whether the player can move the specified piece.
+ */
+RoyalGameOfUr.pieceHasValidMoves = function (
+    playerID,
+    totalDiceValue,
+    piece,
+    board
+) {
+    const currentTileIndex = getIndexOnPath(playerID, piece, board);
+    const newTileIndex = currentTileIndex + totalDiceValue;
+    const newTileVector = getTileVector(playerID, newTileIndex);
+    const pathOfPlayer = pathOfPlayer(playerID);
+    const playerPieces = board[playerID];
+    const opponentPieces = board[3 - playerID];
+    // Out of bounds checking
+    if (newTileIndex &lt; 0 || newTileIndex > pathOfPlayer.length) {
+        return false;
+    }
+    // If the future tile is occupied by another piece by the same player
+    if (includesVector(playerPieces, newTileVector)) {
+        return false;
+    }
+    // Players cannot knock another piece on a rosette tile off the board
+    if (
+        RoyalGameOfUr.tileIsRosette(newTileVector)
+        &amp;&amp; includesVector(opponentPieces, newTileVector)
+    ) {
+        return false;
+    }
+    return true;
+};
+
+/**
+ * Determines if a piece landed on a rosette tile after moving.
+ * In theory this is an impure function but ROSETTE_TILES is not meant to be
+ * mutated, so the same input should always lead to the same output and thus
+ * the function is "pure" in this sense.
+ * @param {number[]} piece Piece to be examined, represented by its location.
+ * @param {Object} board Current board to be examined.
+ * @returns {boolean} Whether the piece landed on a rosette tile after moving.
+ */
+RoyalGameOfUr.pieceLandedOnRosette = function (piece) {
+    return includesVector(ROSETTE_TILES, piece);
+};
+
+/**
+ * Counts the number of pieces at home for the player,
+ * i.e. pieces waiting to moved onto the board.
+ * @param {number} playerID Either 1 or 2 for games with two players.
+ * @returns {number} Number of pieces at home for the player.
+ */
+RoyalGameOfUr.piecesAtHome = function (playerID) {
+    let playerPath;
+    let playerPieces;
+    if (playerID === 1) {
+        playerPath = PLAYER_1_PATH;
+        playerPieces = RoyalGameOfUr.player1Pieces;
+    }
+    if (playerID === 2) {
+        playerPath = PLAYER_2_PATH;
+        playerPieces = RoyalGameOfUr.player2Pieces;
+    }
+    const homeLocation = playerPath[0];
+    const piecesAtHome = playerPieces.filter(function (piece) {
+        return piece === homeLocation;
+        // Unit test this
+    });
+    return piecesAtHome.length;
+};
+
+/* Do something like this in the unit test
+player1Pieces[0] = [9,9];
+console.log(player1Pieces);
+*/
+
+RoyalGameOfUr.ply = function (playerID, totalDiceValue, piece, board) {
+    const currentTileIndex = getIndexOnPath(playerID, piece, board);
+    const newTileIndex = currentTileIndex + totalDiceValue;
+    const newTileVector = getTileVector(playerID, newTileIndex);
+    const pathOfPlayer = pathOfPlayer(playerID);
+    const currentPlayerPieces = board[playerID];
+    const opponentID = 3 - playerID;
+    const currentOpponentPieces = board[opponentID];
+
+    // Moves the piece to the new tile location
+    // Unit test this to make sure currentPlayerPieces is not mutated
+    const newPlayerPieces = currentPlayerPieces;
+    newPlayerPieces[newPlayerPieces.indexOf(piece)] = newTileVector;
+
+    // Knocks opponent piece off the board, if relevant
+    const newOpponentPieces = currentOpponentPieces;
+    if (includesVector(newOpponentPieces, newTileVector)) {
+        const pathOfOpponent = pathOfPlayer(opponentID);
+        newOpponentPieces[newOpponentPieces.indexOf(piece)] = pathOfOpponent[0];
+    }
+
+    const nextPlayerToPly = 3 - board.playerToPly;
+    // Unit test to make sure the board looks right
+    return {
+        playerID: newPlayerPieces,
+        opponentID: newOpponentPieces,
+        "playerToPly": nextPlayerToPly
+    };
+};
+
+/*
+    Helper functions
+*/
+
+// Given the index along a certain player's path, returns the vector location
+// of the tile
+const getTileVector = function (playerID, index) {
+    let pathOfPlayer = pathOfPlayer(playerID);
+    return pathOfPlayer[index];
+};
+
+// Given the vector location of the tile, returns the index along a certain
+// player's path
+const getIndexOnPath = function (playerID, vector) {
+    let pathOfPlayer = pathOfPlayer(playerID);
+    return pathOfPlayer.indexOf(vector);
+};
+
+const pathOfPlayer = function (playerID) {
+    if (playerID === 1) {
+        return PLAYER_1_PATH;
+    }
+    if (playerID === 2) {
+        return PLAYER_2_PATH;
+    }
+    return undefined;
+};
+
+
+/**
+ * Determines if a tile is a rosette tile.
+ * @param {number[]} vector Vector location of the tile.
+ * @returns {boolean} Whether the tile is a rosette tile.
+ */
+RoyalGameOfUr.tileIsRosette = function (vector) {
+    return includesVector(ROSETTE_TILES, vector);
+};
+
+/**
+ * Determines if a tile is empty, i.e. off the board.
+ * @param {number[]} vector Vector location of the tile.
+ * @returns {boolean} Whether the tile is empty.
+ */
+RoyalGameOfUr.tileIsEmpty = function (vector) {
+    return includesVector(EMPTY_TILES, vector);
+};
+
+const includesVector = function (array, vector) {
+    let result = false;
+    const xCoordinateOfVector = vector[0];
+    const yCoordinateOfVector = vector[1];
+    array.forEach(function (element) {
+        const xCoordinateOfElement = element[0];
+        const yCoordinateOfElement = element[1];
+        if (
+            xCoordinateOfElement === xCoordinateOfVector
+            &amp;&amp; yCoordinateOfElement === yCoordinateOfVector
+        ) {
+            result = true;
+            return;
+        }
+    });
+    return result;
+};
+
+// Do I put this in game module or main.js?
+const rollOneDie = function () {
+    return Math.floor(Math.random() * 2);
+};
+
+/**
+ * Rolls a set of four dice randomly. The possible values are from 0 to 4 and
+ * should follow a binomial distribution. Note that this is an impure function
+ * since the same input may lead to different outputs.
+ * @returns {number[]} An array of four numbers, each being either 0 or 1.
+ * The sum of these four values represent the number of steps the player can
+ * make in the ply.
+ */
+RoyalGameOfUr.rollDice = function () {
+    return [rollOneDie(), rollOneDie(), rollOneDie(), rollOneDie()];
+};
+
+export default Object.freeze(RoyalGameOfUr);</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.10</a> on Wed Jun 08 2022 11:13:42 GMT+0100 (British Summer Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

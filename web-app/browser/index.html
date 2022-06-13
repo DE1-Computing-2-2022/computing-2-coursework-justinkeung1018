@@ -1,9 +1,47 @@
-<!-- In HTML Comments are written like this -->
-<!-- They can all be removed for your apps -->
-<!doctype html> <!-- This first line tells browsers to expect modern standard html 5 -->
-<html lang="en-gb"> <!-- This is indicates the page is written in British English, useful for accessibility -->
-<meta charset="utf-8"> <!-- This indicates how the file is encoded. utf-8 is standard -->
-<title>Your Web-app Title</title> <!-- All pages need a title, this will be displayed in the browser's title bar -->
-<link rel="stylesheet" href="default.css"> <!-- Import style sheet – default.css -->
-<link rel="icon" href="./assets/favicon.png"> <!-- Import 'Favorites Icon' – favicon.png -->
-<script type="module" src="main.js"></script> <!-- Load the main script. Must be type="module". Have only one of these -->
+<!DOCTYPE html>
+<html lang="en-gb">
+    <head>
+        <meta charset="utf-8">
+        <title>Royal Game of Ur</title>
+        <link rel="stylesheet" href="default.css">
+        <link rel="icon" href="./assets/favicon.png">
+        <script type="module" src="main.js"></script>
+    </head>
+    <body>
+        <div id="player1Panel" class="player-panel" aria-label="Panel for Player 1">
+            <h3 id="player1Name" class="player-panel__name" aria-label="Player 1's name">Player 1</h3> <!-- To be modified by main.js -->
+            <div class="player-panel__dice-background">
+                <span id="player1TotalDiceValue" class="total-dice-value"></span>
+                <div id="player1DiceRow1" class="dice-row">
+                    <img id="player1Die1" class="dice" />
+                    <img id="player1Die2" class="dice" />
+                </div>
+                <div id="player1DiceRow2" class="dice-row">
+                    <img id="player1Die3" class="dice" />
+                    <img id="player1Die4" class="dice" />
+                </div>
+            </div>
+            <button id="player1PlayButton" class="button button--play">Roll</button>
+            <div id="player1PiecesContainer" class="pieces-container"></div>
+        </div>
+        <div id="gameArea" class="game-area">
+            <img id="board" src="./assets/board.png" class="board" />
+        </div>
+        <div id="player2Panel" class="player-panel" aria-label="Panel for Player 2">
+            <h3 id="player2Name" class="player-panel__name" aria-label="Player 2's name">Player 2</h3> <!-- To be modified by main.js -->
+            <div class="player-panel__dice-background">
+                <span id="player2TotalDiceValue" class="total-dice-value"></span>
+                <div id="player2DiceRow1" class="dice-row">
+                    <img id="player2Die1" class="dice" />
+                    <img id="player2Die2" class="dice" />
+                </div>
+                <div id="player2DiceRow2" class="dice-row">
+                    <img id="player2Die3" class="dice" />
+                    <img id="player2Die4" class="dice" />
+                </div>
+            </div>
+            <button id="player2PlayButton" class="button button--play">Roll</button>
+            <div id="player2PiecesContainer" class="pieces-container"></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,170 @@
+@import url('https://rsms.me/inter/inter.css');
+
+/* Global variables */
+
+ :root {
+     --background: #444444;
+     --dice-background: #EAEAEA;
+     --board-width-actual: calc(100% - 2 * var(--game-area-padding-horizontal));
+     --board-width-design: 910px;
+     --board-padding-horizontal-design: 20px;
+     --board-padding-horizontal-actual: calc(100% * var(--board-padding-horizontal-design) * var(--board-width-actual) / var(--board-width-design));
+     --play-button-background: #2DA01A;
+     --player-panel-background: white;
+ }
+
+/* Generic tags */
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    padding: 75px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: var(--background);
+}
+
+h3 {
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Specific classes */
+
+.board {
+    width: 100%;
+}
+
+.button {
+    border-radius: 100px;
+    padding: 10px 30%;
+    margin: 30px 0px;
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.button--play {
+    background-color: var(--play-button-background);
+}
+
+.dice {
+    width: 40%;
+}
+
+.dice-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-area {
+    /* Shorthand padding notation cannot be accessed in main.js */
+    flex: 1;
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.piece--board {
+    width: 80%;
+}
+
+.piece--home {
+    width: 20%;
+}
+
+.pieces-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pieces__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pieces__row--row2 {
+    margin-top: 10px;
+}
+
+.player-panel {
+    background-color: var(--player-panel-background);
+    border-radius: 10px;
+    border-color: black;
+    padding: 20px 20px 35px 20px;
+    width: clamp(200px, 20%, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.player-panel__dice-background {
+    background-color: #F6CB77;
+    border-radius: 10px;
+    aspect-ratio: 1;
+    padding: 20px 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.player-panel__name {
+    text-align: center;
+}
+
+.tile {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.tile--regular {
+    background-color: #F6CB77;
+}
+
+.tile--rosette {
+    background-color: #F2DDA5;
+}
+
+.tiles-container {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%); 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* background-color: black; */
+}
+
+.tiles-container__row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total-dice-value {
+    font-weight: 800;
+    font-size: 46px;
+    color: #904418;
+}
