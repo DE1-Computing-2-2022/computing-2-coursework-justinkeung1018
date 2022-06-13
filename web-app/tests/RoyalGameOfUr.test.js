@@ -33,7 +33,31 @@ describe("Making a ply", function () {
                     [0, 1], // piece
                     beforeBoard
                 );
-                it("The player should not be allowed to ply", function () {
+                it("All pieces should be unchanged", function () {
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[1],
+                        beforeBoard[1]
+                    )) {
+                        throw new Error(
+                            "Player 1's pieces should not have changed. " +
+                            "Player 1's pieces are " +
+                            `${afterBoard[1]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[1]}.`
+                        );
+                    }
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[2],
+                        beforeBoard[2]
+                    )) {
+                        throw new Error(
+                            "Player 2's pieces should not have changed. " +
+                            "Player 1's pieces are " +
+                            `${afterBoard[2]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[2]}.`
+                        );
+                    }
                 });
                 it(
                     "The next player to ply should still be the same player",
@@ -84,15 +108,36 @@ describe("Making a ply", function () {
                         ]
                     ],
                     1, //playerToPly
-                    [0, 1, 1, 1] // diceValues
+                    [1, 1, 1, 1] // diceValues
                 );
                 const afterBoard = RoyalGameOfUr.ply(
                     1, // playerID
-                    [0, 1], // piece
+                    [4, 0], // piece
                     beforeBoard
                 );
-                it("The player should not be allowed to ply", function () {
-
+                it("All pieces should be unchanged", function () {
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[1],
+                        beforeBoard[1]
+                    )) {
+                        throw new Error(
+                            "Player 1's pieces are " +
+                            `${afterBoard[1]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[1]}.`
+                        );
+                    }
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[2],
+                        beforeBoard[2]
+                    )) {
+                        throw new Error(
+                            "Player 2's pieces are " +
+                            `${afterBoard[2]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[2]}.`
+                        );
+                    }
                 });
                 it(
                     "The next player to ply should still be the same player",
@@ -147,11 +192,34 @@ describe("Making a ply", function () {
                 );
                 const afterBoard = RoyalGameOfUr.ply(
                     1, // playerID
-                    [2, 1], // piece
+                    [1, 1], // piece
                     beforeBoard
                 );
-                it("The player should not be allowed to ply", function () {
-
+                it("All pieces should be unchanged", function () {
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[1],
+                        beforeBoard[1]
+                    )) {
+                        throw new Error(
+                            "Player 1's pieces should not have changed. " +
+                            "Player 1's pieces are " +
+                            `${afterBoard[1]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[1]}.`
+                        );
+                    }
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[2],
+                        beforeBoard[2]
+                    )) {
+                        throw new Error(
+                            "Player 2's pieces should not have changed. " +
+                            "Player 2's pieces are " +
+                            `${afterBoard[2]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[2]}.`
+                        );
+                    }
                 });
                 it(
                     "The next player to ply should still be the same player",
@@ -207,11 +275,48 @@ describe("Making a ply", function () {
             );
             const afterBoard = RoyalGameOfUr.ply(
                 1, // playerID
-                [2, 1], // piece
+                [1, 1], // piece
                 beforeBoard
             );
+            const player1Pieces = afterBoard[1];
+            const expectedPlayer1Pieces = [
+                [3, 1], // Moved to rosette tile
+                [4, 0],
+                [4, 0],
+                [4, 0],
+                [4, 0],
+                [4, 0],
+                [4, 0]
+            ];
+            const expectedPlayer2Pieces = [
+                [4, 2],
+                [4, 2],
+                [4, 2],
+                [4, 2],
+                [4, 2],
+                [4, 2],
+                [4, 2]
+            ];
+            const expectedBoard = RoyalGameOfUr.createBoard(
+                [
+                    expectedPlayer1Pieces,
+                    expectedPlayer2Pieces
+                ],
+                1, // playerToPly
+                [0, 0, 0, 0] // diceValues
+            );
             it("The piece should be moved to the rosette tile", function () {
-
+                if (!RoyalGameOfUr.equalVectorArrays(
+                    player1Pieces,
+                    expectedPlayer1Pieces
+                )) {
+                    throw new Error(
+                        "The board after the ply is " +
+                        `${RoyalGameOfUr.toString(afterBoard)}, ` +
+                        "but it should be " +
+                        `${RoyalGameOfUr.toString(expectedBoard)}.`
+                    );
+                }
             });
             it(
                 "The next player to ply should still be the same player",
@@ -220,7 +325,7 @@ describe("Making a ply", function () {
                         throw new Error(
                             "Next player to ply is currently " +
                             `player ${afterBoard.playerToPly}, ` +
-                            "but it should be player 1."
+                            "but it should be player 2."
                         );
                     }
                 }
@@ -272,8 +377,31 @@ describe("Making a ply", function () {
                     [1, 0], // piece
                     beforeBoard
                 );
-                it("The player should not be allowed to ply", function () {
-
+                it("All pieces should be unchanged", function () {
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[1],
+                        beforeBoard[1]
+                    )) {
+                        throw new Error(
+                            "Player 1's pieces should not have changed. " +
+                            "Player 1's pieces are " +
+                            `${afterBoard[1]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[1]}.`
+                        );
+                    }
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[2],
+                        beforeBoard[2]
+                    )) {
+                        throw new Error(
+                            "Player 2's pieces should not have changed. " +
+                            "Player 1's pieces are " +
+                            `${afterBoard[2]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[2]}.`
+                        );
+                    }
                 });
                 it(
                     "The next player to ply should still be the same player",
@@ -479,11 +607,11 @@ describe("Making a ply", function () {
                 }
             });
             it("The next player to ply should be the opponent", function () {
-                if (afterBoard.playerToPly !== 1) {
+                if (afterBoard.playerToPly === 1) {
                     throw new Error(
                         "Next player to ply is currently " +
                         `player ${afterBoard.playerToPly}, ` +
-                        "but it should be player 1."
+                        "but it should be player 2."
                     );
                 }
             });

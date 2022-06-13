@@ -185,70 +185,9 @@ const rollDice = function (playerID, board) {
     totalDiceValueText.textContent = totalDiceValue;
 };
 
-// Testing
 const player1PlayButton = document.getElementById("player1PlayButton");
 player1PlayButton.onclick = () => rollDice(1, initialBoard);
 const player2PlayButton = document.getElementById("player2PlayButton");
 player2PlayButton.onclick = () => rollDice(2, initialBoard);
 
-const beforeBoard = RoyalGameOfUr.createBoard(
-    [
-        [
-            [7, 0], // Piece to be plyed
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0]
-        ],
-        [
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2]
-        ]
-    ],
-    1, //playerToPly
-    [0, 1, 1, 1] // diceValues
-);
-const afterBoard = RoyalGameOfUr.ply(
-    1, // playerID
-    [7, 0], // piece
-    beforeBoard
-);
-const player1Pieces = afterBoard[1];
-const expectedPlayer1Pieces = [
-    [7, 0], // Not allowed to move off board
-    [4, 0],
-    [4, 0],
-    [4, 0],
-    [4, 0],
-    [4, 0],
-    [4, 0]
-];
-const expectedPlayer2Pieces = [
-    [4, 2],
-    [4, 2],
-    [4, 2],
-    [4, 2],
-    [4, 2],
-    [4, 2],
-    [4, 2]
-];
-const expectedBoard = RoyalGameOfUr.createBoard(
-    [
-        expectedPlayer1Pieces,
-        expectedPlayer2Pieces
-    ],
-    1, // playerToPly
-    [0, 1, 1, 1] // diceValues
-);
-
-console.log(RoyalGameOfUr.equalVectorArrays(
-    player1Pieces,
-    expectedPlayer1Pieces
-));
+// Testing

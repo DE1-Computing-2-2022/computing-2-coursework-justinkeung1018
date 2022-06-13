@@ -138,15 +138,11 @@ RoyalGameOfUr.pieceHasValidMoves = function (
     piece,
     board
 ) {
-    const totalDiceValue = RoyalGameOfUr.sumDiceValues(board);
-    const currentTileIndex = getIndexOnPath(playerID, piece, board);
-    const newTileIndex = currentTileIndex + totalDiceValue;
-    const newTileVector = getTileVector(playerID, newTileIndex);
-    const pathOfPlayer = getPathOfPlayer(playerID);
+    const newTileVector = getNewTileVector(playerID, piece, board);
     const playerPieces = board[playerID];
     const opponentPieces = board[3 - playerID];
     // Out of bounds checking
-    if (newTileIndex < 0 || newTileIndex > pathOfPlayer.length) {
+    if (newTileVector === undefined) {
         return false;
     }
     // If the future tile is occupied by another piece by the same player
@@ -223,42 +219,61 @@ console.log(player1Pieces);
 */
 
 RoyalGameOfUr.ply = function (playerID, piece, board) {
-    const currentTileIndex = getIndexOnPath(playerID, piece, board);
-    const diceValues = board.diceValues;
-    const totalDiceValue = RoyalGameOfUr.sumDiceValues(diceValues);
-    const newTileIndexAlongPath = currentTileIndex + totalDiceValue;
-    const newTileVector = getTileVector(playerID, newTileIndexAlongPath);
+    const newTileVector = getNewTileVector(playerID, piece, board);
     if (newTileVector === undefined) {
         return board;
     }
+
     const currentPlayerPieces = board[playerID];
+    const newPlayerPieces = [...currentPlayerPieces];
     const opponentID = 3 - playerID;
     const currentOpponentPieces = board[opponentID];
+    const newOpponentPieces = [...currentOpponentPieces];
+    const newBoard = Object.assign({}, board);
+
+    // If the piece would land on a rosette tile
+    // (I know there are repeated lines of code now
+    // e.g. regardless of whether the tile is a rosette tile or regular tile,
+    // the player cannot land on a tile occupied by another piece from
+    // themselves, but this is to match the structure of the unit tests.
+    // Might change that in the future, but I'm not sure.)
+    if (RoyalGameOfUr.tileIsRosette(newTileVector)) {
+        if (includesVector(currentPlayerPieces, newTileVector)) {
+            return board;
+        }
+        if (includesVector(currentOpponentPieces, newTileVector)) {
+            return board;
+        }
+        newPlayerPieces[
+            indexOfVectorInArray(newPlayerPieces, piece)
+        ] = newTileVector;
+        newBoard[playerID] = newPlayerPieces;
+        newBoard.diceValues = [0, 0, 0, 0];
+        return newBoard;
+    }
+
+    if (includesVector(currentPlayerPieces, newTileVector)) {
+        return board;
+    }
 
     // Moves the piece to the new tile location
     // Unit test this to make sure currentPlayerPieces is not mutated
-    const newPlayerPieces = [...currentPlayerPieces];
-    newPlayerPieces[newPlayerPieces.indexOf(piece)] = newTileVector;
-
-    // Knocks opponent piece off the board, if relevant
-    const newOpponentPieces = [...currentOpponentPieces];
-    if (includesVector(newOpponentPieces, newTileVector)) {
+    newPlayerPieces[
+        indexOfVectorInArray(newPlayerPieces, piece)
+    ] = newTileVector;
+    if (includesVector(currentOpponentPieces, newTileVector)) {
         const pathOfOpponent = getPathOfPlayer(opponentID);
-        newOpponentPieces[newOpponentPieces.indexOf(piece)] = pathOfOpponent[0];
+        newOpponentPieces[
+            indexOfVectorInArray(newOpponentPieces, newTileVector)
+        ] = pathOfOpponent[0];
     }
 
     const nextPlayerToPly = 3 - board.playerToPly;
-    // Unit test to make sure the board looks right
-
-    return Object.assign(
-        board,
-        {
-            playerID: newPlayerPieces,
-            opponentID: newOpponentPieces,
-            "playerToPly": nextPlayerToPly,
-            "diceValues": [0, 0, 0, 0]
-        }
-    );
+    newBoard[playerID] = newPlayerPieces;
+    newBoard[opponentID] = newOpponentPieces;
+    newBoard.playerToPly = nextPlayerToPly;
+    newBoard.diceValues = [0, 0, 0, 0];
+    return newBoard;
 };
 
 /**
@@ -314,11 +329,15 @@ RoyalGameOfUr.toString = function (board) {
     return boardString;
 };
 
-// Given the index along a certain player's path, returns the vector location
-// of the tile
-const getTileVector = function (playerID, index) {
-    let pathOfPlayer = getPathOfPlayer(playerID);
-    return pathOfPlayer[index];
+// Returns the vector location of the tile, if the piece can be successfully
+// moved to the new location
+const getNewTileVector = function (playerID, piece, board) {
+    const currentTileIndex = getIndexOnPath(playerID, piece, board);
+    const diceValues = board.diceValues;
+    const totalDiceValue = RoyalGameOfUr.sumDiceValues(diceValues);
+    const newTileIndexAlongPath = currentTileIndex + totalDiceValue;
+    const pathOfPlayer = getPathOfPlayer(playerID);
+    return pathOfPlayer[newTileIndexAlongPath];
 };
 
 // Given the vector location of the tile, returns the index along a certain
@@ -348,6 +367,19 @@ const includesVector = function (array, vector) {
     return array.some(function (vectorElement) {
         return equalVectors(vectorElement, vector);
     });
+};
+
+const indexOfVectorInArray = function (array, vector) {
+    let result = -1;
+    if (array === undefined || vector === undefined) {
+        return result;
+    }
+    array.forEach(function (vectorElement, index) {
+        if (equalVectors(vectorElement, vector)) {
+            result = index;
+        }
+    });
+    return result;
 };
 
 const equalVectors = function (vector1, vector2) {
