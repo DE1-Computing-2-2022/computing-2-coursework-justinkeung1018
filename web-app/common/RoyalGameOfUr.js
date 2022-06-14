@@ -108,18 +108,15 @@ RoyalGameOfUr.createBoard = function (
  * @returns {boolean} Whether the player has any valid moves.
  */
 RoyalGameOfUr.playerHasValidMoves = function (playerID, board) {
-    const totalDiceValue = RoyalGameOfUr.sumDiceValues(board);
+    const diceValues = board.diceValues;
+    const totalDiceValue = RoyalGameOfUr.sumDiceValues(diceValues);
     if (totalDiceValue === 0) {
         return false;
     }
     const playerPieces = board[playerID];
     return playerPieces.some(function (piece) {
-        return RoyalGameOfUr.pieceHasValidMoves(
-            playerID,
-            totalDiceValue,
-            piece,
-            board
-        );
+        const plyedBoard = RoyalGameOfUr.ply(playerID, piece, board);
+        return !equalBoards(board, plyedBoard);
     });
 };
 
@@ -397,6 +394,26 @@ const equalVectors = function (vector1, vector2) {
     );
 };
 
+const equalDice = function (dice1, dice2) {
+    return dice1.every(function (die1Value, index) {
+        const die2Value = dice2[index];
+        return die1Value === die2Value;
+    });
+};
+
+const equalBoards = function (board1, board2) {
+    if (
+        board1.length !== board2.length ||
+        !RoyalGameOfUr.equalVectorArrays(board1[1], board2[1]) ||
+        !RoyalGameOfUr.equalVectorArrays(board1[2], board2[2]) ||
+        !equalDice(board1.diceValues, board2.diceValues) ||
+        board1.playerToPly !== board2.playerToPly
+    ) {
+        return false;
+    }
+    return true;
+};
+
 /**
  * Determines whether two arrays containing solely vectors have identical
  * elements.
@@ -464,3 +481,5 @@ RoyalGameOfUr.sumDiceValues = function (diceValues) {
 };
 
 export default Object.freeze(RoyalGameOfUr);
+
+

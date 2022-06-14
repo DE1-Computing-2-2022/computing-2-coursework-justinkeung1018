@@ -1106,3 +1106,153 @@ describe("Checking if the game has ended", function () {
         }
     );
 });
+
+describe("Checking if the player has any valid moves", function () {
+    describe("When the game has just started", function () {
+        const board = RoyalGameOfUr.createBoard(
+            [
+                [
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0]
+                ],
+                [
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2]
+                ]
+            ],
+            1,
+            [0, 1, 1, 1]
+        );
+        it("Player 1 should have valid moves", function () {
+            if (!RoyalGameOfUr.playerHasValidMoves(1, board)) {
+                throw new Error(
+                    "Player 1 should have valid moves, but now they do not."
+                );
+            }
+        });
+        it("Player 2 should have valid moves", function () {
+            if (!RoyalGameOfUr.playerHasValidMoves(2, board)) {
+                throw new Error(
+                    "Player 2 should have valid moves, but now they do not."
+                );
+            }
+        });
+    });
+    describe("When the player rolled 0", function () {
+        const board = RoyalGameOfUr.createBoard(
+            [
+                [
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0]
+                ],
+                [
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2]
+                ]
+            ],
+            1,
+            [0, 0, 0, 0]
+        );
+        it("The player should not have any valid moves", function () {
+            if (RoyalGameOfUr.playerHasValidMoves(1, board)) {
+                throw new Error(
+                    "Player 2 should not have valid moves, but now they do."
+                );
+            }
+        });
+    });
+    describe(
+        "When the player rolled a non-zero number " +
+        "but all target tiles cannot be landed on",
+        function () {
+            const board = RoyalGameOfUr.createBoard(
+                [
+                    [
+                        [2, 0],
+                        [0, 0],
+                        [1, 1],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0]
+                    ],
+                    [
+                        [3, 1],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ]
+                ],
+                1,
+                [0, 0, 1, 1]
+            );
+            it("The player should not have any valid moves", function () {
+                if (RoyalGameOfUr.playerHasValidMoves(1, board)) {
+                    throw new Error(
+                        "Player 1 should not have valid moves, but now they do."
+                    );
+                }
+            });
+        }
+    );
+    describe(
+        "When the player has only one piece near the end " +
+        "but the player overshot",
+        function () {
+            const board = RoyalGameOfUr.createBoard(
+                [
+                    [
+                        [6, 0],
+                        [5, 0],
+                        [5, 0],
+                        [5, 0],
+                        [5, 0],
+                        [5, 0],
+                        [5, 0]
+                    ],
+                    [
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ]
+                ],
+                1,
+                [0, 0, 1, 1]
+            );
+            it("The player should not have any valid moves", function () {
+                if (RoyalGameOfUr.playerHasValidMoves(1, board)) {
+                    throw new Error(
+                        "Player 1 should not have valid moves, but now they do."
+                    );
+                }
+            });
+        }
+    );
+});

@@ -191,32 +191,3 @@ const player2PlayButton = document.getElementById("player2PlayButton");
 player2PlayButton.onclick = () => rollDice(2, initialBoard);
 
 // Testing
-const beforeBoard = RoyalGameOfUr.createBoard(
-    [
-        [
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0]
-        ],
-        [
-            [1, 1],
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2],
-            [4, 2]
-        ]
-    ],
-    1, //playerToPly
-    [0, 1, 1, 1] // diceValues
-);
-const afterBoard = RoyalGameOfUr.ply(
-    1, // playerID
-    [1, 1], // Piece belongs to opponent
-    beforeBoard
-);
