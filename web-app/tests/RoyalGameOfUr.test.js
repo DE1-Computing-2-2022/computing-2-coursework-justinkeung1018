@@ -766,6 +766,258 @@ describe("Making a ply", function () {
             });
         });
     });
+    describe("When the player does not ply their own pieces", function () {
+        describe("When the player selects the opponent's pieces", function () {
+            const beforeBoard = RoyalGameOfUr.createBoard(
+                [
+                    [
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0]
+                    ],
+                    [
+                        [1, 1],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ]
+                ],
+                1, //playerToPly
+                [0, 1, 1, 1] // diceValues
+            );
+            const afterBoard = RoyalGameOfUr.ply(
+                1, // playerID
+                [1, 1], // Piece belongs to opponent
+                beforeBoard
+            );
+            it("All pieces should be unchanged", function () {
+                if (!RoyalGameOfUr.equalVectorArrays(
+                    afterBoard[1],
+                    beforeBoard[1]
+                )) {
+                    throw new Error(
+                        "Player 1's pieces should not have changed. " +
+                        "Player 1's pieces are " +
+                        `${afterBoard[1]}, ` +
+                        "but they should be " +
+                        `${beforeBoard[1]}.`
+                    );
+                }
+                if (!RoyalGameOfUr.equalVectorArrays(
+                    afterBoard[2],
+                    beforeBoard[2]
+                )) {
+                    throw new Error(
+                        "Player 2's pieces should not have changed. " +
+                        "Player 2's pieces are " +
+                        `${afterBoard[2]}, ` +
+                        "but they should be " +
+                        `${beforeBoard[2]}.`
+                    );
+                }
+            });
+            it(
+                "The next player to ply should still be the same player",
+                function () {
+                    if (afterBoard.playerToPly !== 1) {
+                        throw new Error(
+                            "Next player to ply is currently " +
+                            `player ${afterBoard.playerToPly}, ` +
+                            "but it should be player 1."
+                        );
+                    }
+                }
+            );
+            it("The total dice value should be unchanged", function () {
+                const diceValues = afterBoard.diceValues;
+                const totalDiceValue = RoyalGameOfUr.sumDiceValues(
+                    diceValues
+                );
+                if (totalDiceValue !== 3) {
+                    throw new Error(
+                        "Total dice value is currently " +
+                        `${totalDiceValue}, ` +
+                        "but it should be 3."
+                    );
+                }
+            });
+        });
+        describe("When the player selects an unoccupied tile", function () {
+            const beforeBoard = RoyalGameOfUr.createBoard(
+                [
+                    [
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0]
+                    ],
+                    [
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ]
+                ],
+                1, //playerToPly
+                [0, 1, 1, 1] // diceValues
+            );
+            const afterBoard = RoyalGameOfUr.ply(
+                1, // playerID
+                [3, 0], // Unoccupied tile
+                beforeBoard
+            );
+            it("All pieces should be unchanged", function () {
+                if (!RoyalGameOfUr.equalVectorArrays(
+                    afterBoard[1],
+                    beforeBoard[1]
+                )) {
+                    throw new Error(
+                        "Player 1's pieces should not have changed. " +
+                        "Player 1's pieces are " +
+                        `${afterBoard[1]}, ` +
+                        "but they should be " +
+                        `${beforeBoard[1]}.`
+                    );
+                }
+                if (!RoyalGameOfUr.equalVectorArrays(
+                    afterBoard[2],
+                    beforeBoard[2]
+                )) {
+                    throw new Error(
+                        "Player 2's pieces should not have changed. " +
+                        "Player 2's pieces are " +
+                        `${afterBoard[2]}, ` +
+                        "but they should be " +
+                        `${beforeBoard[2]}.`
+                    );
+                }
+            });
+            it(
+                "The next player to ply should still be the same player",
+                function () {
+                    if (afterBoard.playerToPly !== 1) {
+                        throw new Error(
+                            "Next player to ply is currently " +
+                            `player ${afterBoard.playerToPly}, ` +
+                            "but it should be player 1."
+                        );
+                    }
+                }
+            );
+            it("The total dice value should be unchanged", function () {
+                const diceValues = afterBoard.diceValues;
+                const totalDiceValue = RoyalGameOfUr.sumDiceValues(
+                    diceValues
+                );
+                if (totalDiceValue !== 3) {
+                    throw new Error(
+                        "Total dice value is currently " +
+                        `${totalDiceValue}, ` +
+                        "but it should be 3."
+                    );
+                }
+            });
+        });
+        describe(
+            "When the player selects an empty tile, " +
+            "i.e. a tile off the board",
+            function () {
+                const beforeBoard = RoyalGameOfUr.createBoard(
+                    [
+                        [
+                            [4, 0],
+                            [4, 0],
+                            [4, 0],
+                            [4, 0],
+                            [4, 0],
+                            [4, 0],
+                            [4, 0]
+                        ],
+                        [
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2]
+                        ]
+                    ],
+                    1, //playerToPly
+                    [0, 1, 1, 1] // diceValues
+                );
+                const afterBoard = RoyalGameOfUr.ply(
+                    1, // playerID
+                    [5, 0], // Empty tile off the board
+                    beforeBoard
+                );
+                it("All pieces should be unchanged", function () {
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[1],
+                        beforeBoard[1]
+                    )) {
+                        throw new Error(
+                            "Player 1's pieces should not have changed. " +
+                            "Player 1's pieces are " +
+                            `${afterBoard[1]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[1]}.`
+                        );
+                    }
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        afterBoard[2],
+                        beforeBoard[2]
+                    )) {
+                        throw new Error(
+                            "Player 2's pieces should not have changed. " +
+                            "Player 2's pieces are " +
+                            `${afterBoard[2]}, ` +
+                            "but they should be " +
+                            `${beforeBoard[2]}.`
+                        );
+                    }
+                });
+                it(
+                    "The next player to ply should still be the same player",
+                    function () {
+                        if (afterBoard.playerToPly !== 1) {
+                            throw new Error(
+                                "Next player to ply is currently " +
+                                `player ${afterBoard.playerToPly}, ` +
+                                "but it should be player 1."
+                            );
+                        }
+                    }
+                );
+                it("The total dice value should be unchanged", function () {
+                    const diceValues = afterBoard.diceValues;
+                    const totalDiceValue = RoyalGameOfUr.sumDiceValues(
+                        diceValues
+                    );
+                    if (totalDiceValue !== 3) {
+                        throw new Error(
+                            "Total dice value is currently " +
+                            `${totalDiceValue}, ` +
+                            "but it should be 3."
+                        );
+                    }
+                });
+            }
+        );
+    });
 });
 
 describe("Checking if the game has ended", function () {

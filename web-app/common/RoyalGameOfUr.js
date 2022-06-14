@@ -225,6 +225,10 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
     }
 
     const currentPlayerPieces = board[playerID];
+    // If the player selects anything other than their own pieces
+    if (!includesVector(currentPlayerPieces, piece)) {
+        return board;
+    }
     const newPlayerPieces = [...currentPlayerPieces];
     const opponentID = 3 - playerID;
     const currentOpponentPieces = board[opponentID];
