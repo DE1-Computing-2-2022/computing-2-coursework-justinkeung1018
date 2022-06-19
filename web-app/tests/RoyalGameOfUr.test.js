@@ -1256,3 +1256,252 @@ describe("Checking if the player has any valid moves", function () {
         }
     );
 });
+
+describe("Checking if a piece can be moved", function () {
+    describe("When the piece does not belong to the player", function () {
+        describe("When the piece is in the combat zone", function () {
+            const board = RoyalGameOfUr.createBoard(
+                [
+                    [
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0]
+                    ],
+                    [
+                        [1, 1], // Player 2's piece in combat zone
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ]
+                ],
+                1,
+                [0, 0, 1, 1]
+            );
+            it("The piece cannot be moved", function () {
+                if (RoyalGameOfUr.pieceHasValidMoves(1, [1, 1], board)) {
+                    throw new Error(
+                        "Player 1 should not be able to move [1, 1], " +
+                        "which belongs to player 2."
+                    );
+                }
+            });
+        });
+        describe("When the piece is not in the combat zone", function () {
+            const board = RoyalGameOfUr.createBoard(
+                [
+                    [
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0]
+                    ],
+                    [
+                        [3, 2], // Player 2's piece not in combat zone
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ]
+                ],
+                1,
+                [0, 0, 1, 1]
+            );
+            it("The piece cannot be moved", function () {
+                if (RoyalGameOfUr.pieceHasValidMoves(1, [3, 2], board)) {
+                    throw new Error(
+                        "Player 1 should not be able to move [3, 2], " +
+                        "which belongs to player 2."
+                    );
+                }
+            });
+        });
+    });
+    describe("When the piece belongs to the player", function () {
+        describe("When the piece is near the end", function () {
+            describe(
+                "When the player has not scored any pieces yet",
+                function () {
+                    describe(
+                        "If the player rolled the right number",
+                        function () {
+                            const board = RoyalGameOfUr.createBoard(
+                                [
+                                    [
+                                        [6, 0], // Piece near the end
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0]
+                                    ],
+                                    [
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2]
+                                    ]
+                                ],
+                                1,
+                                [0, 0, 1, 0] // Just the right number
+                            );
+                            it("The piece can be moved", function () {
+                                if (!RoyalGameOfUr.pieceHasValidMoves(
+                                    1,
+                                    [6, 0],
+                                    board
+                                )) {
+                                    throw new Error(
+                                        "Player 1 should be able to move" +
+                                        "[6, 0] " +
+                                        "since they rolled the right number."
+                                    );
+                                }
+                            });
+                        }
+                    );
+                    describe("If the player overshot", function () {
+                        const board = RoyalGameOfUr.createBoard(
+                            [
+                                [
+                                    [6, 0], // Piece near the end
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0]
+                                ],
+                                [
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2]
+                                ]
+                            ],
+                            1,
+                            [0, 0, 1, 1] // Overshot
+                        );
+                        it("The piece cannot be moved", function () {
+                            if (RoyalGameOfUr.pieceHasValidMoves(
+                                1,
+                                [6, 0],
+                                board
+                            )) {
+                                throw new Error(
+                                    "Player 1 should not be able to move " +
+                                    "[6, 0] " +
+                                    "since they overshot."
+                                );
+                            }
+                        });
+                    });
+                }
+            );
+            describe(
+                "When the player has scored at least one piece",
+                function () {
+                    describe(
+                        "If the player rolled the right number",
+                        function () {
+                            const board = RoyalGameOfUr.createBoard(
+                                [
+                                    [
+                                        [6, 0], // Piece near the end
+                                        [5, 0], // Scored piece
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0],
+                                        [4, 0]
+                                    ],
+                                    [
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2],
+                                        [4, 2]
+                                    ]
+                                ],
+                                1,
+                                [0, 0, 1, 0] // Just the right number
+                            );
+                            it("The piece can be moved", function () {
+                                if (!RoyalGameOfUr.pieceHasValidMoves(
+                                    1,
+                                    [6, 0],
+                                    board
+                                )) {
+                                    throw new Error(
+                                        "Player 1 should be able to move" +
+                                        "[6, 0] " +
+                                        "since they rolled the right number."
+                                    );
+                                }
+                            });
+                        }
+                    );
+                    describe("If the player overshot", function () {
+                        const board = RoyalGameOfUr.createBoard(
+                            [
+                                [
+                                    [6, 0], // Piece near the end
+                                    [5, 0], // Scored piece
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0],
+                                    [4, 0]
+                                ],
+                                [
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2],
+                                    [4, 2]
+                                ]
+                            ],
+                            1,
+                            [0, 0, 1, 1] // Overshot
+                        );
+                        it("The piece cannot be moved", function () {
+                            if (RoyalGameOfUr.pieceHasValidMoves(
+                                1,
+                                [6, 0],
+                                board
+                            )) {
+                                throw new Error(
+                                    "Player 1 should not be able to move " +
+                                    "[6, 0] " +
+                                    "since they overshot."
+                                );
+                            }
+                        });
+                    });
+                }
+            );
+        });
+    });
+});

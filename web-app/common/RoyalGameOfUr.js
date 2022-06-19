@@ -116,12 +116,9 @@ RoyalGameOfUr.playerHasValidMoves = function (playerID, board) {
     const playerPieces = board[playerID];
     return playerPieces.some(function (piece) {
         const plyedBoard = RoyalGameOfUr.ply(playerID, piece, board);
-        return !RoyalGameOfUr.equalBoards(board, plyedBoard);
+        return !equalBoards(board, plyedBoard);
     });
 };
-
-// Assume piece is on a valid location and belongs to the player making the ply.
-// TODO: implement unit test for this.
 
 /**
  * Determines if the player can move a particular piece.
@@ -138,12 +135,24 @@ RoyalGameOfUr.pieceHasValidMoves = function (
     const newTileVector = getNewTileVector(playerID, piece, board);
     const playerPieces = board[playerID];
     const opponentPieces = board[3 - playerID];
+    const pathOfPlayer = getPathOfPlayer(playerID);
+    const playerLastTilePlusOne = pathOfPlayer[pathOfPlayer.length - 1];
     // Out of bounds checking
     if (newTileVector === undefined) {
         return false;
     }
+    // Player cannot ply pieces that does not belong to them
+    if (!includesVector(playerPieces, piece)) {
+        return false;
+    }
     // If the future tile is occupied by another piece by the same player
-    if (includesVector(playerPieces, newTileVector)) {
+    // and the future tile is not one tile beyond the last tile,
+    // i.e. if the player were to ply the piece,
+    // the piece would be moved off the board
+    if (
+        includesVector(playerPieces, newTileVector)
+        && !equalVectors(playerLastTilePlusOne, newTileVector)
+    ) {
         return false;
     }
     // Players cannot knock another piece on a rosette tile off the board
@@ -287,7 +296,7 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
 
 /**
  * Skips a ply if the player cannot make any moves.
- * @param {*} board Board to be examined.
+ * @param {Object} board Board to be examined.
  * @returns A new board
  */
 RoyalGameOfUr.pass = function (board) {
@@ -354,6 +363,9 @@ RoyalGameOfUr.toString = function (board) {
 // moved to the new location
 const getNewTileVector = function (playerID, piece, board) {
     const currentTileIndex = getIndexOnPath(playerID, piece, board);
+    if (currentTileIndex < 0) {
+        return undefined;
+    }
     const diceValues = board.diceValues;
     const totalDiceValue = RoyalGameOfUr.sumDiceValues(diceValues);
     const newTileIndexAlongPath = currentTileIndex + totalDiceValue;
@@ -421,7 +433,7 @@ const equalDice = function (dice1, dice2) {
     });
 };
 
-RoyalGameOfUr.equalBoards = function (board1, board2) {
+const equalBoards = function (board1, board2) {
     if (
         board1.length !== board2.length ||
         !RoyalGameOfUr.equalVectorArrays(board1[1], board2[1]) ||

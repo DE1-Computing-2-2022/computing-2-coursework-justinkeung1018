@@ -100,7 +100,7 @@ const drawTiles = function () {
     });
 };
 
-const enablePlayButton = function (playerID, board) {
+const enablePlayButton = function (board) {
     const nextPlayerID = board.playerToPly;
     const nextPlayerPlayButtonID = `player${
         nextPlayerID
@@ -108,17 +108,13 @@ const enablePlayButton = function (playerID, board) {
     const nextPlayerPlayButton = document.getElementById(
         nextPlayerPlayButtonID
     );
-    nextPlayerPlayButton.onclick = () => rollDice(
-        nextPlayerID,
-        board
-    );
+    nextPlayerPlayButton.onclick = () => rollDice(nextPlayerID, board);
     nextPlayerPlayButton.disabled = false;
 };
 
 const redrawPiecesAtHome = function (playerID, board) {
     const containerID = `player${playerID}PiecesContainer`;
     const container = document.getElementById(containerID);
-
     const playerIndex = playerID - 1; // Because array indexing starts from 0
     const piecesAtHome = RoyalGameOfUr.piecesAtHome(playerID, board);
     const row1 = document.createElement("div");
@@ -140,7 +136,7 @@ const redrawPiecesAtHome = function (playerID, board) {
                         homePiece,
                         board
                     );
-                    redrawScreen(playerID, boardAfterPly);
+                    redrawScreen(boardAfterPly);
                 };
             }
         } else {
@@ -173,8 +169,8 @@ const redrawPiecesOnBoard = function (board) {
 
     // Redraws new pieces
     const allPlayersPieces = [board[1], board[2]];
+    const playerID = board.playerToPly;
     allPlayersPieces.forEach(function (playerPieces, playerIndex) {
-        const playerID = playerIndex + 1; // 0 indexing
         console.log("New turn");
         playerPieces.forEach(function (piece) {
             if (RoyalGameOfUr.tileIsEmpty(piece)) {
@@ -192,7 +188,7 @@ const redrawPiecesOnBoard = function (board) {
                 console.log(`${piece} has valid moves`);
                 const boardAfterPly = RoyalGameOfUr.ply(playerID, piece, board);
                 console.log(boardAfterPly);
-                image.onclick = () => redrawScreen(playerID, boardAfterPly);
+                image.onclick = () => redrawScreen(boardAfterPly);
             }
             tileOccupiedByPiece.replaceChildren(image);
         });
@@ -203,10 +199,10 @@ const rollDice = function (playerID, board) {
     const boardAfterRollingDice = RoyalGameOfUr.rollDice(board);
     if (!RoyalGameOfUr.playerHasValidMoves(playerID, boardAfterRollingDice)) {
         const boardAfterPassing = RoyalGameOfUr.pass(boardAfterRollingDice);
-        redrawScreen(playerID, boardAfterPassing);
+        redrawScreen(boardAfterPassing);
         return;
     }
-    redrawScreen(playerID, boardAfterRollingDice);
+    redrawScreen(boardAfterRollingDice);
     const diceValues = boardAfterRollingDice.diceValues;
     diceValues.forEach(function (dieValue, index) {
         const dieImage = document.getElementById(
@@ -280,7 +276,6 @@ const redrawPlayerPanels = function (board) {
     );
     opponentTotalDiceValueText.textContent = "";
 
-
     // Changing button color
     const playerPlayButtonID = `player${playerID}PlayButton`;
     const playerPlayButton = document.getElementById(playerPlayButtonID);
@@ -291,12 +286,12 @@ const redrawPlayerPanels = function (board) {
     opponentPlayButton.className = "button button--grayed";
 };
 
-const redrawScreen = function (playerID, board) {
+const redrawScreen = function (board) {
     redrawPiecesAtHome(1, board);
     redrawPiecesAtHome(2, board);
     redrawPiecesOnBoard(board);
     redrawPlayerPanels(board);
-    enablePlayButton(playerID, board);
+    enablePlayButton(board);
 };
 
 // Setting up the game
