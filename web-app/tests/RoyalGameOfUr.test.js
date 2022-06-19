@@ -618,11 +618,84 @@ describe("Making a ply", function () {
         });
     });
     describe("When the piece is near the end", function () {
-        describe(
-            "If the player rolled the right number, " +
-            "i.e. such that the piece would land on exactly one tile beyond " +
-            "the last tile of the player's path",
-            function () {
+        describe("When the player has not scored any pieces yet", function () {
+            describe(
+                "If the player rolled the right number, " +
+                "i.e. such that the piece would land on exactly one tile " +
+                "beyond the last tile of the player's path",
+                function () {
+                    const beforeBoard = RoyalGameOfUr.createBoard(
+                        [
+                            [
+                                [7, 0], // Piece to be plyed
+                                [4, 0],
+                                [4, 0],
+                                [4, 0],
+                                [4, 0],
+                                [4, 0],
+                                [4, 0]
+                            ],
+                            [
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2]
+                            ]
+                        ],
+                        1, //playerToPly
+                        [0, 1, 1, 0] // diceValues
+                    );
+                    const afterBoard = RoyalGameOfUr.ply(
+                        1, // playerID
+                        [7, 0], // piece
+                        beforeBoard
+                    );
+                    const player1Pieces = afterBoard[1];
+                    const expectedPlayer1Pieces = [
+                        [5, 0], // Moved off the board
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0],
+                        [4, 0]
+                    ];
+                    const expectedPlayer2Pieces = [
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2],
+                        [4, 2]
+                    ];
+                    const expectedBoard = RoyalGameOfUr.createBoard(
+                        [
+                            expectedPlayer1Pieces,
+                            expectedPlayer2Pieces
+                        ],
+                        2, // playerToPly
+                        [0, 0, 0, 0] // diceValues
+                    );
+                    it("The piece should move off the board", function () {
+                        if (!RoyalGameOfUr.equalVectorArrays(
+                            player1Pieces,
+                            expectedPlayer1Pieces
+                        )) {
+                            throw new Error(
+                                "The board after the ply is " +
+                                `${RoyalGameOfUr.toString(afterBoard)}, ` +
+                                "but it should be " +
+                                `${RoyalGameOfUr.toString(expectedBoard)}.`
+                            );
+                        }
+                    });
+                }
+            );
+            describe("If the player overshot", function () {
                 const beforeBoard = RoyalGameOfUr.createBoard(
                     [
                         [
@@ -645,7 +718,7 @@ describe("Making a ply", function () {
                         ]
                     ],
                     1, //playerToPly
-                    [0, 1, 1, 0] // diceValues
+                    [0, 1, 1, 1] // diceValues
                 );
                 const afterBoard = RoyalGameOfUr.ply(
                     1, // playerID
@@ -654,7 +727,7 @@ describe("Making a ply", function () {
                 );
                 const player1Pieces = afterBoard[1];
                 const expectedPlayer1Pieces = [
-                    [5, 0], // Moved off the board
+                    [7, 0], // Not allowed to move off board
                     [4, 0],
                     [4, 0],
                     [4, 0],
@@ -676,10 +749,10 @@ describe("Making a ply", function () {
                         expectedPlayer1Pieces,
                         expectedPlayer2Pieces
                     ],
-                    2, // playerToPly
-                    [0, 0, 0, 0] // diceValues
+                    1, // playerToPly
+                    [0, 1, 1, 1] // diceValues
                 );
-                it("The piece should move off the board", function () {
+                it("The piece should not move off the board", function () {
                     if (!RoyalGameOfUr.equalVectorArrays(
                         player1Pieces,
                         expectedPlayer1Pieces
@@ -692,21 +765,54 @@ describe("Making a ply", function () {
                         );
                     }
                 });
-            }
-        );
-        describe("If the player overshot", function () {
-            const beforeBoard = RoyalGameOfUr.createBoard(
-                [
-                    [
-                        [7, 0], // Piece to be plyed
-                        [4, 0],
+            });
+        });
+        describe("When the player has scored at least one piece", function () {
+            describe(
+                "If the player rolled the right number, " +
+                "i.e. such that the piece would land on exactly one tile " +
+                "beyond the last tile of the player's path",
+                function () {
+                    const beforeBoard = RoyalGameOfUr.createBoard(
+                        [
+                            [
+                                [7, 0], // Piece to be plyed
+                                [5, 0], // Scored piece
+                                [4, 0],
+                                [4, 0],
+                                [4, 0],
+                                [4, 0],
+                                [4, 0]
+                            ],
+                            [
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2],
+                                [4, 2]
+                            ]
+                        ],
+                        1, //playerToPly
+                        [0, 1, 1, 0] // diceValues
+                    );
+                    const afterBoard = RoyalGameOfUr.ply(
+                        1, // playerID
+                        [7, 0], // piece
+                        beforeBoard
+                    );
+                    const player1Pieces = afterBoard[1];
+                    const expectedPlayer1Pieces = [
+                        [5, 0], // Moved off the board
+                        [5, 0], // Previously scored piece
                         [4, 0],
                         [4, 0],
                         [4, 0],
                         [4, 0],
                         [4, 0]
-                    ],
-                    [
+                    ];
+                    const expectedPlayer2Pieces = [
                         [4, 2],
                         [4, 2],
                         [4, 2],
@@ -714,55 +820,100 @@ describe("Making a ply", function () {
                         [4, 2],
                         [4, 2],
                         [4, 2]
-                    ]
-                ],
-                1, //playerToPly
-                [0, 1, 1, 1] // diceValues
-            );
-            const afterBoard = RoyalGameOfUr.ply(
-                1, // playerID
-                [7, 0], // piece
-                beforeBoard
-            );
-            const player1Pieces = afterBoard[1];
-            const expectedPlayer1Pieces = [
-                [7, 0], // Not allowed to move off board
-                [4, 0],
-                [4, 0],
-                [4, 0],
-                [4, 0],
-                [4, 0],
-                [4, 0]
-            ];
-            const expectedPlayer2Pieces = [
-                [4, 2],
-                [4, 2],
-                [4, 2],
-                [4, 2],
-                [4, 2],
-                [4, 2],
-                [4, 2]
-            ];
-            const expectedBoard = RoyalGameOfUr.createBoard(
-                [
-                    expectedPlayer1Pieces,
-                    expectedPlayer2Pieces
-                ],
-                1, // playerToPly
-                [0, 1, 1, 1] // diceValues
-            );
-            it("The piece should not move off the board", function () {
-                if (!RoyalGameOfUr.equalVectorArrays(
-                    player1Pieces,
-                    expectedPlayer1Pieces
-                )) {
-                    throw new Error(
-                        "The board after the ply is " +
-                        `${RoyalGameOfUr.toString(afterBoard)}, ` +
-                        "but it should be " +
-                        `${RoyalGameOfUr.toString(expectedBoard)}.`
+                    ];
+                    const expectedBoard = RoyalGameOfUr.createBoard(
+                        [
+                            expectedPlayer1Pieces,
+                            expectedPlayer2Pieces
+                        ],
+                        2, // playerToPly
+                        [0, 0, 0, 0] // diceValues
                     );
+                    it("The piece should move off the board", function () {
+                        if (!RoyalGameOfUr.equalVectorArrays(
+                            player1Pieces,
+                            expectedPlayer1Pieces
+                        )) {
+                            throw new Error(
+                                "The board after the ply is " +
+                                `${RoyalGameOfUr.toString(afterBoard)}, ` +
+                                "but it should be " +
+                                `${RoyalGameOfUr.toString(expectedBoard)}.`
+                            );
+                        }
+                    });
                 }
+            );
+            describe("If the player overshot", function () {
+                const beforeBoard = RoyalGameOfUr.createBoard(
+                    [
+                        [
+                            [7, 0], // Piece to be plyed
+                            [5, 0], // Scored piece
+                            [4, 0],
+                            [4, 0],
+                            [4, 0],
+                            [4, 0],
+                            [4, 0]
+                        ],
+                        [
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2],
+                            [4, 2]
+                        ]
+                    ],
+                    1, //playerToPly
+                    [0, 1, 1, 1] // diceValues
+                );
+                const afterBoard = RoyalGameOfUr.ply(
+                    1, // playerID
+                    [7, 0], // piece
+                    beforeBoard
+                );
+                const player1Pieces = afterBoard[1];
+                const expectedPlayer1Pieces = [
+                    [7, 0], // Not allowed to move off board
+                    [5, 0], // Scored piece
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0]
+                ];
+                const expectedPlayer2Pieces = [
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2]
+                ];
+                const expectedBoard = RoyalGameOfUr.createBoard(
+                    [
+                        expectedPlayer1Pieces,
+                        expectedPlayer2Pieces
+                    ],
+                    1, // playerToPly
+                    [0, 1, 1, 1] // diceValues
+                );
+                it("The piece should not move off the board", function () {
+                    if (!RoyalGameOfUr.equalVectorArrays(
+                        player1Pieces,
+                        expectedPlayer1Pieces
+                    )) {
+                        throw new Error(
+                            "The board after the ply is " +
+                            `${RoyalGameOfUr.toString(afterBoard)}, ` +
+                            "but it should be " +
+                            `${RoyalGameOfUr.toString(expectedBoard)}.`
+                        );
+                    }
+                });
             });
         });
     });

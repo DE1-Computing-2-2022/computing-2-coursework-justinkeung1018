@@ -237,12 +237,10 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
     if (newTileVector === undefined) {
         return board;
     }
-
-    const currentPlayerPieces = board[playerID];
-    // If the player selects anything other than their own pieces
-    if (!includesVector(currentPlayerPieces, piece)) {
+    if (!RoyalGameOfUr.pieceHasValidMoves(playerID, piece, board)) {
         return board;
     }
+    const currentPlayerPieces = board[playerID];
     const newPlayerPieces = [...currentPlayerPieces];
     const opponentID = 3 - playerID;
     const currentOpponentPieces = board[opponentID];
@@ -250,28 +248,13 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
     const newBoard = Object.assign({}, board);
 
     // If the piece would land on a rosette tile
-    // (I know there are repeated lines of code now
-    // e.g. regardless of whether the tile is a rosette tile or regular tile,
-    // the player cannot land on a tile occupied by another piece from
-    // themselves, but this is to match the structure of the unit tests.
-    // Might change that in the future, but I'm not sure.)
     if (RoyalGameOfUr.tileIsRosette(newTileVector)) {
-        if (includesVector(currentPlayerPieces, newTileVector)) {
-            return board;
-        }
-        if (includesVector(currentOpponentPieces, newTileVector)) {
-            return board;
-        }
         newPlayerPieces[
             indexOfVectorInArray(newPlayerPieces, piece)
         ] = newTileVector;
         newBoard[playerID] = newPlayerPieces;
         newBoard.diceValues = [0, 0, 0, 0];
         return newBoard;
-    }
-
-    if (includesVector(currentPlayerPieces, newTileVector)) {
-        return board;
     }
 
     // Moves the piece to the new tile location
