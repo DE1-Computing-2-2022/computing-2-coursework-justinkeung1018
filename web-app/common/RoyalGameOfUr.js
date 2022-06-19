@@ -116,7 +116,7 @@ RoyalGameOfUr.playerHasValidMoves = function (playerID, board) {
     const playerPieces = board[playerID];
     return playerPieces.some(function (piece) {
         const plyedBoard = RoyalGameOfUr.ply(playerID, piece, board);
-        return !equalBoards(board, plyedBoard);
+        return !RoyalGameOfUr.equalBoards(board, plyedBoard);
     });
 };
 
@@ -215,6 +215,14 @@ player1Pieces[0] = [9,9];
 console.log(player1Pieces);
 */
 
+/**
+ * Makes a ply.
+ * @param {*} playerID Player making the ply.
+ * @param {*} piece Piece to be plyed.
+ * @param {*} board Current board.
+ * @returns {Object} New board which describes the state of the game after
+ * the ply is made.
+ */
 RoyalGameOfUr.ply = function (playerID, piece, board) {
     const newTileVector = getNewTileVector(playerID, piece, board);
     if (newTileVector === undefined) {
@@ -274,6 +282,18 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
     newBoard[opponentID] = newOpponentPieces;
     newBoard.playerToPly = nextPlayerToPly;
     newBoard.diceValues = [0, 0, 0, 0];
+    return newBoard;
+};
+
+/**
+ * Skips a ply if the player cannot make any moves.
+ * @param {*} board Board to be examined.
+ * @returns A new board
+ */
+RoyalGameOfUr.pass = function (board) {
+    const newBoard = Object.assign({}, board);
+    const nextPlayerToPly = 3 - board.playerToPly;
+    newBoard.playerToPly = nextPlayerToPly;
     return newBoard;
 };
 
@@ -401,7 +421,7 @@ const equalDice = function (dice1, dice2) {
     });
 };
 
-const equalBoards = function (board1, board2) {
+RoyalGameOfUr.equalBoards = function (board1, board2) {
     if (
         board1.length !== board2.length ||
         !RoyalGameOfUr.equalVectorArrays(board1[1], board2[1]) ||
@@ -458,7 +478,7 @@ const rollOneDie = function () {
  * make in the ply.
  */
 RoyalGameOfUr.rollDice = function (board) {
-    const newBoard = board;
+    const newBoard = Object.assign({}, board);
     newBoard.diceValues = [
         rollOneDie(),
         rollOneDie(),
@@ -481,5 +501,3 @@ RoyalGameOfUr.sumDiceValues = function (diceValues) {
 };
 
 export default Object.freeze(RoyalGameOfUr);
-
-

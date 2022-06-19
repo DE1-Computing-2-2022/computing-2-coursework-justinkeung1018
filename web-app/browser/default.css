@@ -57,6 +57,10 @@ h3 {
     background-color: var(--play-button-background);
 }
 
+.button--grayed {
+    background-color: #EAEAEA;
+}
+
 .dice {
     width: 40%;
 }
@@ -78,6 +82,10 @@ h3 {
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+.grayed-text {
+    color: #CBCBCB;
 }
 
 .piece--board {
@@ -108,13 +116,13 @@ h3 {
 .player-panel {
     background-color: var(--player-panel-background);
     border-radius: 10px;
-    border-color: black;
     padding: 20px 20px 35px 20px;
     width: clamp(200px, 20%, 100%);
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+    position: relative;
 }
 
 .player-panel__dice-background {
@@ -126,6 +134,20 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+}
+
+.player-panel__dice-background--grayed {
+    background-color: #EAEAEA;
+}
+
+.player-panel--grayed {
+    background-color: rgba(35, 35, 35, 0.5);
+    position: absolute;
+    z-index: 1;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
 }
 
 .player-panel__name {
