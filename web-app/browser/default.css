@@ -29,6 +29,20 @@ body {
     background-color: var(--background);
 }
 
+h1 {
+    font-weight: 700;
+    font-size: 8rem;
+    color: white;
+    margin: 0px 0px 40px 0px;
+}
+
+h2 {
+    font-weight: 400;
+    font-size: 3rem;
+    color: white;
+    margin: 0px 0px 25px 0px;
+}
+
 h3 {
     font-weight: 600;
     font-size: 2rem;
@@ -61,6 +75,15 @@ h3 {
     background-color: #EAEAEA;
 }
 
+.button--nav {
+    padding: 12px 60px;
+    background-color: transparent;
+    border-color: white;
+    border-width: 1px;
+    font-weight: 500;
+    font-size: 1.8rem;
+}
+
 .dice {
     width: 40%;
 }
@@ -72,13 +95,21 @@ h3 {
     align-items: center;
 }
 
+.end-screen {
+    display: none;
+}
+
+.home-screen {
+    display: flex;
+}
+
 .game-area {
     /* Shorthand padding notation cannot be accessed in main.js */
     flex: 1;
     padding-left: 5%;
     padding-right: 5%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -88,12 +119,85 @@ h3 {
     color: #CBCBCB;
 }
 
+.name-input-container {
+    display: grid;
+    row-gap: 25px;
+    column-gap: 25px;
+    grid-template-columns: max-content max-content;
+}
+
+.name-input-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.name-input__label {
+    font-weight: 400;
+    font-size: 3rem;
+    color: white;
+    text-align: right;
+}
+
+.nav-screen {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 .piece--board {
     width: 80%;
 }
 
 .piece--home {
     width: 20%;
+}
+
+.piece--scored {
+    position: absolute;
+    height: 35%;
+    aspect-ratio: 1;
+}
+
+.piece--scored--1 {
+    top: 0%;
+    right: 0%;
+}
+
+.piece--scored--2 {
+    top: 47%;
+    right: 4%;
+}
+
+.piece--scored--3 {
+    top: 15%;
+    right: 29%;
+}
+
+.piece--scored--4 {
+    top: 57%;
+    right: 32%;
+}
+
+.piece--scored--5 {
+    top: 16%;
+    right: 54%;
+}
+
+.piece--scored--6 {
+    bottom: 0%;
+    right: 59%;
+}
+
+.piece--scored--7 {
+    top: 35%;
+    left: 0%;
 }
 
 .pieces-container {
@@ -152,6 +256,24 @@ h3 {
 
 .player-panel__name {
     text-align: center;
+}
+
+.scored-pieces-container {
+    width: 50%;
+    height: 30%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.scored-pieces-container--player-1 {
+    margin: 30px 0px 0px 0px;
+}
+
+.scored-pieces-container--player-2 {
+    transform: rotate(180deg) scaleX(-1);
+    margin: 0px 0px 30px 0px;
 }
 
 .tile {

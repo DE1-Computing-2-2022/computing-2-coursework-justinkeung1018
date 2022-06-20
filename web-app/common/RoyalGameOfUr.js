@@ -182,6 +182,7 @@ RoyalGameOfUr.pieceLandedOnRosette = function (piece) {
  * Counts the number of pieces at home for the player,
  * i.e. pieces waiting to moved onto the board.
  * @param {number} playerID Either 1 or 2 for games with two players.
+ * @param {Object} board The current board.
  * @returns {number} Number of pieces at home for the player.
  */
 RoyalGameOfUr.piecesAtHome = function (playerID, board) {
@@ -196,9 +197,31 @@ RoyalGameOfUr.piecesAtHome = function (playerID, board) {
     const homeLocation = playerPath[0];
     const piecesAtHome = playerPieces.filter(function (piece) {
         return piece === homeLocation;
-        // Unit test this
     });
     return piecesAtHome.length;
+};
+
+/**
+ * Counts the number of scored pieces for the player,
+ * i.e. pieces that have been moved off the board.
+ * @param {number} playerID Either 1 or 2 for games with two players.
+ * @param {Object} board The current board.
+ * @returns {number} Number of scored pieces for the player.
+ */
+RoyalGameOfUr.piecesScored = function (playerID, board) {
+    let playerPath;
+    if (playerID === 1) {
+        playerPath = PLAYER_1_PATH;
+    }
+    if (playerID === 2) {
+        playerPath = PLAYER_2_PATH;
+    }
+    const playerPieces = board[playerID];
+    const scoredLocation = playerPath[playerPath.length - 1];
+    const piecesScored = playerPieces.filter(function (piece) {
+        return piece === scoredLocation;
+    });
+    return piecesScored.length;
 };
 
 /**

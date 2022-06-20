@@ -26,7 +26,9 @@
             <div id="player1PiecesContainer" class="pieces-container"></div>
         </div>
         <div id="gameArea" class="game-area">
+            <div id="player2ScoredPiecesContainer" class="scored-pieces-container scored-pieces-container--player-2"></div>
             <img id="board" src="./assets/board.png" class="board" />
+            <div id="player1ScoredPiecesContainer" class="scored-pieces-container scored-pieces-container--player-1"></div>
         </div>
         <div id="player2Panel" class="player-panel" aria-label="Panel for Player 2">
             <div id="player2PanelGrayed" class="player-panel player-panel--grayed"></div>
@@ -44,6 +46,22 @@
             </div>
             <button id="player2PlayButton" class="button button--play">Roll</button>
             <div id="player2PiecesContainer" class="pieces-container"></div>
+        </div>
+        <div id="homeScreen" class="nav-screen home-screen">
+            <h1>Royal Game of Ur</h1>
+            <form action="" method="post" class="name-input-form">
+                <div class="name-input-container">
+                    <label for="player1NameInput" class="name-input__label">Player 1:</label>
+                    <input id="player1NameInput" maxlength="20" required>
+                    <label for="player2NameInput" class="name-input__label">Player 2:</label>
+                    <input id="player2NameInput" maxlength="20" required>
+                </div>
+                <button id="startGameButton" class="button button--nav">Start game</button>
+            </form>
+        </div>
+        <div id="endScreen" class="nav-screen end-screen">
+            <h1>Freddie wins!</h1>
+            <button id="returnHomeButton" class="button button--nav">Return to home</button>
         </div>
     </body>
 </html>

@@ -67,7 +67,7 @@ const drawTilesContainer = function () {
     gameArea.append(tilesContainer);
 };
 
-drawTilesContainer();
+
 
 const drawTiles = function () {
     // Retrieving dimensions from browser side
@@ -112,49 +112,55 @@ const enablePlayButton = function (board) {
     nextPlayerPlayButton.disabled = false;
 };
 
-const redrawPiecesAtHome = function (playerID, board) {
-    const containerID = `player${playerID}PiecesContainer`;
-    const container = document.getElementById(containerID);
-    const playerIndex = playerID - 1; // Because array indexing starts from 0
-    const piecesAtHome = RoyalGameOfUr.piecesAtHome(playerID, board);
-    const row1 = document.createElement("div");
-    row1.className = "pieces__row";
-    const row2 = document.createElement("div");
-    row2.className = "pieces__row pieces__row--row2";
-    const pieces = R.range(0, 7);
-    pieces.forEach(function (index) {
-        const piece = document.createElement("img");
-        piece.className = "piece--home";
-        if (index < piecesAtHome) {
-            piece.src = PIECE_IMAGE_SOURCES[playerIndex];
-            piece.alt = PIECE_IMAGE_ALTS[playerIndex];
-            const homePiece = initialBoard[playerID][0];
-            if (RoyalGameOfUr.pieceHasValidMoves(playerID, homePiece, board)) {
-                piece.onclick = function () {
-                    const boardAfterPly = RoyalGameOfUr.ply(
-                        playerID,
-                        homePiece,
-                        board
-                    );
-                    redrawScreen(boardAfterPly);
-                };
+const redrawPiecesAtHome = function (board) {
+    [1, 2].forEach(function (playerID) {
+        const containerID = `player${playerID}PiecesContainer`;
+        const container = document.getElementById(containerID);
+        const playerIndex = playerID - 1; // Array indexing starts from 0
+        const piecesAtHome = RoyalGameOfUr.piecesAtHome(playerID, board);
+        const row1 = document.createElement("div");
+        row1.className = "pieces__row";
+        const row2 = document.createElement("div");
+        row2.className = "pieces__row pieces__row--row2";
+        const pieces = R.range(0, 7);
+        pieces.forEach(function (index) {
+            const piece = document.createElement("img");
+            piece.className = "piece--home";
+            if (index < piecesAtHome) {
+                piece.src = PIECE_IMAGE_SOURCES[playerIndex];
+                piece.alt = PIECE_IMAGE_ALTS[playerIndex];
+                const homePiece = initialBoard[playerID][0];
+                if (RoyalGameOfUr.pieceHasValidMoves(
+                    playerID,
+                    homePiece,
+                    board
+                )) {
+                    piece.onclick = function () {
+                        const boardAfterPly = RoyalGameOfUr.ply(
+                            playerID,
+                            homePiece,
+                            board
+                        );
+                        redrawScreen(boardAfterPly);
+                    };
+                }
+            } else {
+                piece.src = PIECE_IMAGE_SOURCES[PIECE_IMAGE_SOURCES.length - 1];
+                piece.alt = PIECE_IMAGE_ALTS[PIECE_IMAGE_ALTS.length - 1];
             }
-        } else {
-            piece.src = PIECE_IMAGE_SOURCES[PIECE_IMAGE_SOURCES.length - 1];
-            piece.alt = PIECE_IMAGE_ALTS[PIECE_IMAGE_ALTS.length - 1];
-        }
-        if (index < 4) {
-            row1.append(piece);
-        } else {
-            row2.append(piece);
-        }
+            if (index < 4) {
+                row1.append(piece);
+            } else {
+                row2.append(piece);
+            }
+        });
+        // Placeholder for the non-existing 8th piece, for layout purposes
+        const placeholder = document.createElement("span");
+        placeholder.className = "piece--home";
+        row2.append(placeholder);
+        const rows = [row1, row2];
+        container.replaceChildren(...rows);
     });
-    // Placeholder for the non-existing 8th piece, for layout purposes
-    const placeholder = document.createElement("span");
-    placeholder.className = "piece--home";
-    row2.append(placeholder);
-    const rows = [row1, row2];
-    container.replaceChildren(...rows);
 };
 
 const redrawPiecesOnBoard = function (board) {
@@ -171,7 +177,6 @@ const redrawPiecesOnBoard = function (board) {
     const allPlayersPieces = [board[1], board[2]];
     const playerID = board.playerToPly;
     allPlayersPieces.forEach(function (playerPieces, playerIndex) {
-        console.log("New turn");
         playerPieces.forEach(function (piece) {
             if (RoyalGameOfUr.tileIsEmpty(piece)) {
                 return;
@@ -185,9 +190,7 @@ const redrawPiecesOnBoard = function (board) {
             image.alt = PIECE_IMAGE_ALTS[playerIndex];
             image.className = "piece--board";
             if (RoyalGameOfUr.pieceHasValidMoves(playerID, piece, board)) {
-                console.log(`${piece} has valid moves`);
                 const boardAfterPly = RoyalGameOfUr.ply(playerID, piece, board);
-                console.log(boardAfterPly);
                 image.onclick = () => redrawScreen(boardAfterPly);
             }
             tileOccupiedByPiece.replaceChildren(image);
@@ -286,9 +289,35 @@ const redrawPlayerPanels = function (board) {
     opponentPlayButton.className = "button button--grayed";
 };
 
+const redrawScoredPieces = function (board) {
+    [1, 2].forEach(function (playerID) {
+        const containerID = `player${playerID}ScoredPiecesContainer`;
+        const container = document.getElementById(containerID);
+        const playerIndex = playerID - 1; // Array indexing starts from 0
+        const piecesScored = RoyalGameOfUr.piecesScored(playerID, board);
+        const pieces = R.range(0, 7);
+        const arrayOfScoredPieces = [];
+        pieces.forEach(function (index) {
+            const piece = document.createElement("img");
+            piece.className = `piece--scored piece--scored--${index + 1}`;
+            piece.src = PIECE_IMAGE_SOURCES[playerIndex];
+            piece.alt = PIECE_IMAGE_ALTS[playerIndex];
+            if (index >= piecesScored) {
+                piece.style.display = "none";
+            }
+            arrayOfScoredPieces.push(piece);
+        });
+        container.replaceChildren(...arrayOfScoredPieces);
+    });
+};
+
 const redrawScreen = function (board) {
-    redrawPiecesAtHome(1, board);
-    redrawPiecesAtHome(2, board);
+    if (!RoyalGameOfUr.isEnded(board)) {
+        endScreen.style.display = "flex";
+        return;
+    }
+    redrawPiecesAtHome(board);
+    redrawScoredPieces(board);
     redrawPiecesOnBoard(board);
     redrawPlayerPanels(board);
     enablePlayButton(board);
@@ -296,12 +325,23 @@ const redrawScreen = function (board) {
 
 // Setting up the game
 const initialBoard = RoyalGameOfUr.createBoard();
+drawTilesContainer();
 drawTiles();
-redrawPiecesAtHome(1, initialBoard);
-redrawPiecesAtHome(2, initialBoard);
+redrawPiecesAtHome(initialBoard);
 redrawPiecesOnBoard(initialBoard);
 redrawPlayerPanels(initialBoard);
 const player1PlayButton = document.getElementById("player1PlayButton");
 player1PlayButton.onclick = () => rollDice(1, initialBoard);
+const homeScreen = document.getElementById("homeScreen");
+const endScreen = document.getElementById("endScreen");
+const startGameButton = document.getElementById("startGameButton");
+startGameButton.onsubmit = function () {
+    homeScreen.style.display = "none";
+}
+const returnHomeButton = document.getElementById("returnHomeButton");
+returnHomeButton.onclick = function () {
+    homeScreen.style.display = "flex";
+    endScreen.style.display = "none";
+};
 
 // Testing
