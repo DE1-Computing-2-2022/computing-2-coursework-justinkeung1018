@@ -313,7 +313,7 @@ const redrawScoredPieces = function (board) {
 };
 
 const redrawScreen = function (board) {
-    if (!RoyalGameOfUr.isEnded(board)) {
+    if (RoyalGameOfUr.isEnded(board)) {
         endScreen.style.display = "flex";
         return;
     }
@@ -331,14 +331,28 @@ drawTiles();
 redrawPiecesAtHome(initialBoard);
 redrawPiecesOnBoard(initialBoard);
 redrawPlayerPanels(initialBoard);
+
 const player1PlayButton = document.getElementById("player1PlayButton");
 player1PlayButton.onclick = () => rollDice(1, initialBoard);
+
 const homeScreen = document.getElementById("homeScreen");
 const endScreen = document.getElementById("endScreen");
 const startGameButton = document.getElementById("startGameButton");
-startGameButton.onsubmit = function () {
-    homeScreen.style.display = "none";
+const player1NameInput = document.getElementById("player1NameInput");
+const player2NameInput = document.getElementById("player2NameInput");
+
+startGameButton.onclick = function () {
+    const player1Name = player1NameInput.value;
+    const player2Name = player2NameInput.value;
+    if (player1Name.length !== 0 && player2Name.length !== 0) {
+        const player1NameHeader = document.getElementById("player1Name");
+        const player2NameHeader = document.getElementById("player2Name");
+        player1NameHeader.textContent = player1Name;
+        player2NameHeader.textContent = player2Name;
+        homeScreen.style.display = "none";
+    }
 };
+
 const returnHomeButton = document.getElementById("returnHomeButton");
 returnHomeButton.onclick = function () {
     homeScreen.style.display = "flex";
@@ -346,36 +360,3 @@ returnHomeButton.onclick = function () {
 };
 
 // Testing
-StatsRGOU.addStats({
-    "Ian": 1,
-    "Justin": 0
-});
-console.log(StatsRGOU.allPlayersStats.Ian);
-console.log(StatsRGOU.allPlayersStats.Justin);
-const board = RoyalGameOfUr.createBoard(
-    [
-        [
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0]
-        ],
-        [
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2]
-        ]
-    ],
-    1, //playerToPly
-    [0, 0, 0, 0] // diceValues
-);
-StatsRGOU.recordGame("Ian", "Justin", board); // Player 2 won
-console.log(StatsRGOU.allPlayersStats.Ian);
-console.log(StatsRGOU.allPlayersStats.Justin);
