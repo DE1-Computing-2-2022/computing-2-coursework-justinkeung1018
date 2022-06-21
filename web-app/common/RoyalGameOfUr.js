@@ -63,9 +63,6 @@ const EMPTY_TILES = [
     PLAYER_2_PATH[PLAYER_2_PATH.length - 1]
 ];
 
-// const PLAYER_1_INITIAL_PIECES = new Array(PIECES_PER_PLAYER).fill(
-//     PLAYER_1_PATH[0]
-// );
 const PLAYER_1_INITIAL_PIECES = R.repeat(PLAYER_1_PATH[0], PIECES_PER_PLAYER);
 const PLAYER_2_INITIAL_PIECES = R.repeat(PLAYER_2_PATH[0], PIECES_PER_PLAYER);
 
@@ -281,7 +278,6 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
     }
 
     // Moves the piece to the new tile location
-    // Unit test this to make sure currentPlayerPieces is not mutated
     newPlayerPieces[
         indexOfVectorInArray(newPlayerPieces, piece)
     ] = newTileVector;

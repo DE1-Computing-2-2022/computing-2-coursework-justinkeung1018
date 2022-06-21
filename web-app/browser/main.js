@@ -1,6 +1,7 @@
 import R from "./common/ramda.js";
 import Json_rpc from "./Json_rpc.js";
 import RoyalGameOfUr from "../common/RoyalGameOfUr.js";
+import StatsRGOU from "../server/StatsRGOU.js";
 
 // Look into preloading images with Promise
 // because there are quite a few images to load
@@ -337,7 +338,7 @@ const endScreen = document.getElementById("endScreen");
 const startGameButton = document.getElementById("startGameButton");
 startGameButton.onsubmit = function () {
     homeScreen.style.display = "none";
-}
+};
 const returnHomeButton = document.getElementById("returnHomeButton");
 returnHomeButton.onclick = function () {
     homeScreen.style.display = "flex";
@@ -345,3 +346,36 @@ returnHomeButton.onclick = function () {
 };
 
 // Testing
+StatsRGOU.addStats({
+    "Ian": 1,
+    "Justin": 0
+});
+console.log(StatsRGOU.allPlayersStats.Ian);
+console.log(StatsRGOU.allPlayersStats.Justin);
+const board = RoyalGameOfUr.createBoard(
+    [
+        [
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0]
+        ],
+        [
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2]
+        ]
+    ],
+    1, //playerToPly
+    [0, 0, 0, 0] // diceValues
+);
+StatsRGOU.recordGame("Ian", "Justin", board); // Player 2 won
+console.log(StatsRGOU.allPlayersStats.Ian);
+console.log(StatsRGOU.allPlayersStats.Justin);
