@@ -119,6 +119,14 @@ h3 {
     color: #CBCBCB;
 }
 
+.name-input {
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 3rem;
+    color: white;
+    border: none;
+}
+
 .name-input-container {
     display: grid;
     row-gap: 25px;
@@ -126,11 +134,11 @@ h3 {
     grid-template-columns: max-content max-content;
 }
 
-.name-input-form {
+/* .name-input-form {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+} */
 
 .name-input__label {
     font-weight: 400;

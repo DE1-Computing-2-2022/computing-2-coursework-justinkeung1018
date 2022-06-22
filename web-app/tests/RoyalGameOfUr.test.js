@@ -1656,3 +1656,111 @@ describe("Checking if a piece can be moved", function () {
         });
     });
 });
+describe("Determining the winner of a game", function () {
+    describe("When player 1 won", function () {
+        const board = RoyalGameOfUr.createBoard(
+            [
+                [
+                    [5, 0],
+                    [5, 0],
+                    [5, 0],
+                    [5, 0],
+                    [5, 0],
+                    [5, 0],
+                    [5, 0]
+                ],
+                [
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2]
+                ]
+            ],
+            2,
+            [0, 0, 1, 1]
+        );
+        const winner = RoyalGameOfUr.winner(board);
+        it("The winner should be player 1", function () {
+            if (winner !== 1) {
+                throw new Error(
+                    `The winner is currently ${winner}, ` +
+                    "but it should be player 1."
+                );
+            }
+        });
+    });
+    describe("When player 2 won", function () {
+        const board = RoyalGameOfUr.createBoard(
+            [
+                [
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0]
+                ],
+                [
+                    [5, 2],
+                    [5, 2],
+                    [5, 2],
+                    [5, 2],
+                    [5, 2],
+                    [5, 2],
+                    [5, 2]
+                ]
+            ],
+            1,
+            [0, 0, 1, 1]
+        );
+        const winner = RoyalGameOfUr.winner(board);
+        it("The winner should be player 2", function () {
+            if (winner !== 2) {
+                throw new Error(
+                    `The winner is currently ${winner}, ` +
+                    "but it should be player 2."
+                );
+            }
+        });
+    });
+    describe("When the board has not ended", function () {
+        const board = RoyalGameOfUr.createBoard(
+            [
+                [
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0],
+                    [4, 0]
+                ],
+                [
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2],
+                    [4, 2]
+                ]
+            ],
+            1,
+            [0, 0, 1, 1]
+        );
+        const winner = RoyalGameOfUr.winner(board);
+        it("The winner should be undefined", function () {
+            if (winner !== undefined) {
+                throw new Error(
+                    `The winner is currently ${winner}, ` +
+                    "but there should not be a winner " +
+                    "since the game has not ended."
+                );
+            }
+        });
+    });
+});

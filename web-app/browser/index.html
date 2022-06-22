@@ -10,7 +10,7 @@
     <body>
         <div id="player1Panel" class="player-panel" aria-label="Panel for Player 1">
             <div id="player1PanelGrayed" class="player-panel player-panel--grayed"></div>
-            <h3 id="player1Name" class="player-panel__name" aria-label="Player 1's name">Player 1</h3> <!-- To be modified by main.js -->
+            <h3 id="player1Name" class="player-panel__name" aria-label="Player 1's name">Player 1</h3>
             <div id="player1DiceBackground" class="player-panel__dice-background">
                 <span id="player1TotalDiceValue" class="total-dice-value"></span>
                 <div id="player1DiceRow1" class="dice-row">
@@ -32,7 +32,7 @@
         </div>
         <div id="player2Panel" class="player-panel" aria-label="Panel for Player 2">
             <div id="player2PanelGrayed" class="player-panel player-panel--grayed"></div>
-            <h3 id="player2Name" class="player-panel__name" aria-label="Player 2's name">Player 2</h3> <!-- To be modified by main.js -->
+            <h3 id="player2Name" class="player-panel__name" aria-label="Player 2's name">Player 2</h3>
             <div id="player2DiceBackground" class="player-panel__dice-background">
                 <span id="player2TotalDiceValue" class="total-dice-value"></span>
                 <div id="player2DiceRow1" class="dice-row">
@@ -51,14 +51,14 @@
             <h1>Royal Game of Ur</h1>
             <div class="name-input-container">
                 <label for="player1NameInput" class="name-input__label">Player 1:</label>
-                <input id="player1NameInput" maxlength="20" required>
+                <input id="player1NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
                 <label for="player2NameInput" class="name-input__label">Player 2:</label>
-                <input id="player2NameInput" maxlength="20" required>
+                <input id="player2NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
             </div>
             <button id="startGameButton" class="button button--nav">Start game</button>
         </div>
         <div id="endScreen" class="nav-screen end-screen">
-            <h1>Freddie wins!</h1>
+            <h1 id="winMessage">Player wins!</h1>
             <button id="returnHomeButton" class="button button--nav">Return to home</button>
         </div>
     </body>

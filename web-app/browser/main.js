@@ -314,6 +314,18 @@ const redrawScoredPieces = function (board) {
 
 const redrawScreen = function (board) {
     if (RoyalGameOfUr.isEnded(board)) {
+        const player1NameInput = document.getElementById("player1NameInput");
+        const player2NameInput = document.getElementById("player2NameInput");
+        const player1Name = player1NameInput.value;
+        const player2Name = player2NameInput.value;
+        const winner = RoyalGameOfUr.winner(board);
+        const winMessage = document.getElementById("winMessage");
+        if (winner === 1) {
+            winMessage.textContent = `${player1Name} wins!`;
+        }
+        if (winner === 2) {
+            winMessage.textContent = `${player2Name} wins!`;
+        }
         endScreen.style.display = "flex";
         return;
     }

@@ -327,6 +327,31 @@ RoyalGameOfUr.isEnded = function (board) {
 };
 
 /**
+ * Determines the winner of the game.
+ * @param {Object} board The board to be examined.
+ * @returns {number} The ID of the player who won.
+ */
+RoyalGameOfUr.winner = function (board) {
+    if (!RoyalGameOfUr.isEnded(board)) {
+        return undefined;
+    }
+    let winner;
+    [1, 2].forEach(function (playerID) {
+        const playerPath = getPathOfPlayer(playerID);
+        const lastTile = playerPath[playerPath.length - 1];
+        const playerPieces = board[playerID];
+        const playerWon = playerPieces.every(function (piece) {
+            return equalVectors(lastTile, piece);
+        });
+        if (playerWon) {
+            winner = playerID;
+            return;
+        }
+    });
+    return winner;
+};
+
+/**
  * Turns the board into a string in the form of a 2D matrix for debugging.
  * @param {Object} board The board to be printed.
  * @returns {String} The printable 2D matrix representation of the board.
