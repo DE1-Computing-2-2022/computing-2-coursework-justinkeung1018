@@ -246,9 +246,9 @@ console.log(player1Pieces);
 
 /**
  * Makes a ply.
- * @param {*} playerID Player making the ply.
- * @param {*} piece Piece to be plyed.
- * @param {*} board Current board.
+ * @param {number} playerID Player making the ply.
+ * @param {number[]} piece Piece to be plyed.
+ * @param {Object} board Current board.
  * @returns {Object} New board which describes the state of the game after
  * the ply is made.
  */
@@ -299,7 +299,7 @@ RoyalGameOfUr.ply = function (playerID, piece, board) {
 /**
  * Skips a ply if the player cannot make any moves.
  * @param {Object} board Board to be examined.
- * @returns A new board
+ * @returns {Object} A new board
  */
 RoyalGameOfUr.pass = function (board) {
     const newBoard = Object.assign({}, board);

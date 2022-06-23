@@ -13,6 +13,9 @@ const isDescending = function (someStats) {
 };
 
 describe("Fetching the top five players", function () {
+    beforeEach(function () {
+        StatsRGOU.clearStats();
+    });
     describe("When there are no previous players", function () {
         const allPlayersStats = {};
         const top5Stats = StatsRGOU.getTop5Stats(allPlayersStats);
@@ -31,6 +34,7 @@ describe("Fetching the top five players", function () {
             "Justin": 0,
             "Ian": 1
         };
+        StatsRGOU.addStats(allPlayersStats);
         const top5Stats = StatsRGOU.getTop5Stats(allPlayersStats);
         const expectedTop5Stats = [["Ian", 1], ["Justin", 0]];
         it(
@@ -71,6 +75,7 @@ describe("Fetching the top five players", function () {
             "Michael": 2,
             "Felix": 6
         };
+        StatsRGOU.addStats(allPlayersStats);
         const top5Stats = StatsRGOU.getTop5Stats(allPlayersStats);
         const expectedTop5Stats = [
             ["Pop", 20],
@@ -103,6 +108,9 @@ describe("Fetching the top five players", function () {
 });
 
 describe("Recording a game", function () {
+    beforeEach(function () {
+        StatsRGOU.clearStats();
+    });
     describe("When there are no previous games", function () {
         it("The winner should have 1 win", function () {
 
@@ -135,7 +143,6 @@ describe("Recording a game", function () {
             });
         });
         describe("When two existing players play", function () {
-            StatsRGOU.clearStats();
             StatsRGOU.addStats({
                 "Ian": 1,
                 "Justin": 0

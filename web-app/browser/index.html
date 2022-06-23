@@ -48,18 +48,33 @@
             <div id="player2PiecesContainer" class="pieces-container"></div>
         </div>
         <div id="homeScreen" class="nav-screen home-screen">
-            <h1>Royal Game of Ur</h1>
-            <div class="name-input-container">
-                <label for="player1NameInput" class="name-input__label">Player 1:</label>
-                <input id="player1NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
-                <label for="player2NameInput" class="name-input__label">Player 2:</label>
-                <input id="player2NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
+            <div class="info-buttons-container"></div>
+            <div class="home-screen__main-container">
+                <h1>Royal Game of Ur</h1>
+                <div class="name-input-container">
+                    <label for="player1NameInput" class="name-input__label">Player 1:</label>
+                    <input id="player1NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
+                    <label for="player2NameInput" class="name-input__label">Player 2:</label>
+                    <input id="player2NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
+                </div>
+                <button id="startGameButton" class="button button--nav">Start game</button>
             </div>
-            <button id="startGameButton" class="button button--nav">Start game</button>
+            <div class="info-buttons-container">
+                <button id="instructionsButton" class="info-button">Instructions</button>
+                <button id="statsButton" class="info-button">Statistics</button>
+            </div>
         </div>
+        <div id="statsScreen" class="nav-screen stats-screen">
+            <table>
+                <thead>Top 5 players</thead>
+                <tbody id="statsTableBody"></tbody>
+            </table>
+        </div>
+        <div id="instructionsScreen" class="nav-screen instructions-screen"></div>
         <div id="endScreen" class="nav-screen end-screen">
             <h1 id="winMessage">Player wins!</h1>
             <button id="returnHomeButton" class="button button--nav">Return to home</button>
         </div>
+        
     </body>
 </html>

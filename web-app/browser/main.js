@@ -327,6 +327,9 @@ const redrawScreen = function (board) {
             winMessage.textContent = `${player2Name} wins!`;
         }
         endScreen.style.display = "flex";
+        recordGame(player1Name, player2Name, board).then(
+            redrawStats()
+        );
         return;
     }
     redrawPiecesAtHome(board);
@@ -348,6 +351,8 @@ const player1PlayButton = document.getElementById("player1PlayButton");
 player1PlayButton.onclick = () => rollDice(1, initialBoard);
 
 const homeScreen = document.getElementById("homeScreen");
+const instructionsScreen = document.getElementById("instructionsScreen");
+const statsScreen = document.getElementById("statsScreen");
 const endScreen = document.getElementById("endScreen");
 const startGameButton = document.getElementById("startGameButton");
 const player1NameInput = document.getElementById("player1NameInput");
@@ -362,13 +367,53 @@ startGameButton.onclick = function () {
         player1NameHeader.textContent = player1Name;
         player2NameHeader.textContent = player2Name;
         homeScreen.style.display = "none";
+        redrawScreen(initialBoard);
+        player1PlayButton.onclick = () => rollDice(1, initialBoard);
     }
+};
+
+const instructionsButton = document.getElementById("instructionsButton");
+instructionsButton.onclick = function () {
+    homeScreen.style.display = "none";
+    instructionsScreen.style.display = "flex";
+};
+
+const statsButton = document.getElementById("statsButton");
+statsButton.onclick = function () {
+    homeScreen.style.display = "none";
+    statsScreen.style.display = "flex";
 };
 
 const returnHomeButton = document.getElementById("returnHomeButton");
 returnHomeButton.onclick = function () {
     homeScreen.style.display = "flex";
     endScreen.style.display = "none";
+
+    
+};
+
+// Game statistics
+
+const getTop5Stats = Json_rpc.method("getTop5Stats");
+const recordGame = Json_rpc.method("recordGame");
+
+const redrawStats = function () {
+    const statsTableBody = document.getElementById("statsTableBody");
+    getTop5Stats().then(function (top5Stats) {
+        console.log(top5Stats);
+        top5Stats.forEach(function (playerStats) {
+            const name = playerStats[0];
+            const wins = playerStats[1];
+            const row = document.createElement("tr");
+            const nameData = document.createElement("td");
+            const winsData = document.createElement("td");
+            nameData.textContent = name;
+            winsData.textContent = wins;
+            row.append(nameData);
+            row.append(winsData);
+            statsTableBody.append(row);
+        });
+    });
 };
 
 // Testing
