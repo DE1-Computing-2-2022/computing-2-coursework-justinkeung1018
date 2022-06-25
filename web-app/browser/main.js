@@ -350,7 +350,6 @@ const player1PlayButton = document.getElementById("player1PlayButton");
 player1PlayButton.onclick = () => rollDice(1, initialBoard);
 
 const homeScreen = document.getElementById("homeScreen");
-const instructionsScreen = document.getElementById("instructionsScreen");
 const statsScreen = document.getElementById("statsScreen");
 const endScreen = document.getElementById("endScreen");
 const startGameButton = document.getElementById("startGameButton");
