@@ -60,21 +60,39 @@
                 <button id="startGameButton" class="button button--nav">Start game</button>
             </div>
             <div class="info-buttons-container">
-                <button id="instructionsButton" class="info-button">Instructions</button>
+                <button id="instructionsButton" class="info-button info-button--instructions">Instructions</button>
                 <button id="statsButton" class="info-button">Statistics</button>
             </div>
         </div>
         <div id="statsScreen" class="nav-screen stats-screen">
-            <table>
-                <thead>Top 5 players</thead>
-                <tbody id="statsTableBody"></tbody>
-            </table>
+            <div class="nav-screen__container">
+                <div class="nav-screen__side-container">
+                    <button id="statsScreenBackButton" class="back-button">
+                        <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                </div>
+                <div class="nav-screen__center-container">
+                    <span class="nav-screen__heading">Top 5 players</span>
+                    <table class="stats-screen__table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Wins</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statsTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="nav-screen__side-container"></div>
+            </div>
         </div>
         <div id="instructionsScreen" class="nav-screen instructions-screen"></div>
         <div id="endScreen" class="nav-screen end-screen">
             <h1 id="winMessage">Player wins!</h1>
             <button id="returnHomeButton" class="button button--nav">Return to home</button>
         </div>
-        
+        <!-- Importing ionicons -->
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     </body>
 </html>

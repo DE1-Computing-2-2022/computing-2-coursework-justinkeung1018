@@ -388,8 +388,12 @@ const returnHomeButton = document.getElementById("returnHomeButton");
 returnHomeButton.onclick = function () {
     homeScreen.style.display = "flex";
     endScreen.style.display = "none";
+};
 
-    
+const statsScreenBackButton = document.getElementById("statsScreenBackButton");
+statsScreenBackButton.onclick = function () {
+    homeScreen.style.display = "flex";
+    statsScreen.style.display = "none";
 };
 
 // Game statistics
@@ -400,7 +404,6 @@ const recordGame = Json_rpc.method("recordGame");
 const redrawStats = function () {
     const statsTableBody = document.getElementById("statsTableBody");
     getTop5Stats().then(function (top5Stats) {
-        console.log(top5Stats);
         top5Stats.forEach(function (playerStats) {
             const name = playerStats[0];
             const wins = playerStats[1];
@@ -408,7 +411,9 @@ const redrawStats = function () {
             const nameData = document.createElement("td");
             const winsData = document.createElement("td");
             nameData.textContent = name;
+            nameData.className = "name-column";
             winsData.textContent = wins;
+            winsData.className = "wins-column";
             row.append(nameData);
             row.append(winsData);
             statsTableBody.append(row);
@@ -417,3 +422,29 @@ const redrawStats = function () {
 };
 
 // Testing
+const board = RoyalGameOfUr.createBoard(
+    [
+        [
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0]
+        ],
+        [
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2]
+        ]
+    ],
+    1, //playerToPly
+    [0, 0, 0, 0] // diceValues
+);
+recordGame("Ian", "Ian Chow Kin Hang", board); // Player 2 won
+redrawStats();

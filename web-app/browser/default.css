@@ -5,12 +5,9 @@
  :root {
      --background: #444444;
      --dice-background: #EAEAEA;
-     --board-width-actual: calc(100% - 2 * var(--game-area-padding-horizontal));
-     --board-width-design: 910px;
-     --board-padding-horizontal-design: 20px;
-     --board-padding-horizontal-actual: calc(100% * var(--board-padding-horizontal-design) * var(--board-width-actual) / var(--board-width-design));
      --play-button-background: #2DA01A;
      --player-panel-background: white;
+     --nav-screen__heading: 48px;
  }
 
 /* Generic tags */
@@ -53,6 +50,18 @@ h3 {
 }
 
 /* Specific classes */
+
+.back-button {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    text-align: right;
+    aspect-ratio: 1;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: var(--nav-screen__heading);
+}
 
 .board {
     width: 100%;
@@ -108,6 +117,18 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.info-button {
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.info-button--instructions {
+    padding-bottom: 10px;
 }
 
 .info-buttons-container {
@@ -169,6 +190,33 @@ h3 {
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.7);
+}
+
+.nav-screen__container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.nav-screen__center-container {
+    /* flex: 2; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-screen__side-container {
+    position: relative;
+    flex: 1;
+}
+
+.nav-screen__heading {
+    font-weight: 700;
+    font-size: var(--nav-screen__heading);
+    color: white;
+    padding: 0px 0px 30px 0px;
 }
 
 .piece--board {
@@ -298,6 +346,9 @@ h3 {
 
 .stats-screen {
     display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
 .tile {
@@ -335,4 +386,40 @@ h3 {
     font-weight: 800;
     font-size: 46px;
     color: #904418;
+}
+
+/* Table for stats screen */
+table {
+    table-layout: fixed;
+    /* width: 100%; */
+    border-collapse: collapse;
+    border: 3px solid white;
+    border-spacing: 10px;
+    color: white;
+    padding: 10px;
+}
+
+thead th {
+    font-size: 42px;
+    font-style: italic;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+tbody td {
+    font-size: 42px;
+    font-weight: 400;
+    padding: 5px 0px;
+}
+
+/* "Player" column */
+thead th:nth-child(1), .name-column {
+    text-align: left;
+    padding-left: 20px;
+}
+
+/* "Wins" column */
+thead th:nth-child(2), .wins-column {
+    text-align: right;
+    padding-right: 20px;
 }
