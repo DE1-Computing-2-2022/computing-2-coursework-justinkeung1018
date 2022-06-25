@@ -8,7 +8,7 @@
         <script type="module" src="main.js"></script>
     </head>
     <body>
-        <div id="player1Panel" class="player-panel" aria-label="Panel for Player 1">
+        <div role="region" id="player1Panel" class="player-panel" aria-label="Player 1's panel">
             <div id="player1PanelGrayed" class="player-panel player-panel--grayed"></div>
             <h3 id="player1Name" class="player-panel__name" aria-label="Player 1's name">Player 1</h3>
             <div id="player1DiceBackground" class="player-panel__dice-background">
@@ -25,12 +25,12 @@
             <button id="player1PlayButton" class="button button--play">Roll</button>
             <div id="player1PiecesContainer" class="pieces-container"></div>
         </div>
-        <div id="gameArea" class="game-area">
+        <main id="gameArea" class="game-area" aria-label="Game area">
             <div id="player2ScoredPiecesContainer" class="scored-pieces-container scored-pieces-container--player-2"></div>
-            <img id="board" src="./assets/board.png" class="board" />
+            <img id="board" src="./assets/board.png" alt="Background image for board" class="board" />
             <div id="player1ScoredPiecesContainer" class="scored-pieces-container scored-pieces-container--player-1"></div>
-        </div>
-        <div id="player2Panel" class="player-panel" aria-label="Panel for Player 2">
+        </main>
+        <div role="region" id="player2Panel" class="player-panel" aria-label="Player 2's label">
             <div id="player2PanelGrayed" class="player-panel player-panel--grayed"></div>
             <h3 id="player2Name" class="player-panel__name" aria-label="Player 2's name">Player 2</h3>
             <div id="player2DiceBackground" class="player-panel__dice-background">
@@ -49,7 +49,7 @@
         </div>
         <div id="homeScreen" class="nav-screen home-screen">
             <div class="info-buttons-container"></div>
-            <div class="home-screen__main-container">
+            <nav class="home-screen__main-container" aria-label="Home screen input fields and buttons">
                 <h1>Royal Game of Ur</h1>
                 <div class="name-input-container">
                     <label for="player1NameInput" class="name-input__label">Player 1:</label>
@@ -58,7 +58,7 @@
                     <input id="player2NameInput" class="name-input" maxlength="20" placeholder="Enter name" required>
                 </div>
                 <button id="startGameButton" class="button button--nav">Start game</button>
-            </div>
+            </nav>
             <div class="info-buttons-container">
                 <button id="wikipediaButton" class="info-button info-button--wikipedia">Wikipedia page</button>
                 <button id="statsButton" class="info-button">Statistics</button>
@@ -71,7 +71,7 @@
                         <ion-icon name="chevron-back-outline"></ion-icon>
                     </button>
                 </div>
-                <div class="nav-screen__center-container">
+                <div role="region" class="nav-screen__center-container" aria-label="Statistics of top 5 players">
                     <span class="nav-screen__heading">Top 5 players</span>
                     <div class="stats-screen__table">
                         <table>
