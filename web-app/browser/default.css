@@ -127,7 +127,7 @@ h3 {
     font-size: 20px;
 }
 
-.info-button--instructions {
+.info-button--wikipedia {
     padding-bottom: 10px;
 }
 
@@ -136,10 +136,6 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.instructions-screen {
-    display: none;
 }
 
 .game-area {
@@ -351,6 +347,11 @@ h3 {
     justify-content: center;
 }
 
+.stats-screen__table {
+    border: 3px solid white;
+    padding: 10px 20px;
+}
+
 .tile {
     aspect-ratio: 1;
     display: flex;
@@ -389,21 +390,19 @@ h3 {
 }
 
 /* Table for stats screen */
+
 table {
     table-layout: fixed;
     /* width: 100%; */
     border-collapse: collapse;
-    border: 3px solid white;
     border-spacing: 10px;
     color: white;
-    padding: 10px;
 }
 
 thead th {
     font-size: 42px;
     font-style: italic;
     font-weight: 600;
-    padding-top: 10px;
 }
 
 tbody td {
@@ -415,11 +414,9 @@ tbody td {
 /* "Player" column */
 thead th:nth-child(1), .name-column {
     text-align: left;
-    padding-left: 20px;
 }
 
 /* "Wins" column */
 thead th:nth-child(2), .wins-column {
     text-align: right;
-    padding-right: 20px;
 }

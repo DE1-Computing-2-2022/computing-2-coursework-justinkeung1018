@@ -1,7 +1,6 @@
 import R from "./common/ramda.js";
 import Json_rpc from "./Json_rpc.js";
 import RoyalGameOfUr from "../common/RoyalGameOfUr.js";
-import StatsRGOU from "../server/StatsRGOU.js";
 
 // Look into preloading images with Promise
 // because there are quite a few images to load
@@ -372,10 +371,9 @@ startGameButton.onclick = function () {
     }
 };
 
-const instructionsButton = document.getElementById("instructionsButton");
-instructionsButton.onclick = function () {
-    homeScreen.style.display = "none";
-    instructionsScreen.style.display = "flex";
+const wikipediaButton = document.getElementById("wikipediaButton");
+wikipediaButton.onclick = function () {
+    window.open("https://en.wikipedia.org/wiki/Royal_Game_of_Ur");
 };
 
 const statsButton = document.getElementById("statsButton");
@@ -420,31 +418,3 @@ const redrawStats = function () {
         });
     });
 };
-
-// Testing
-const board = RoyalGameOfUr.createBoard(
-    [
-        [
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0],
-            [4, 0]
-        ],
-        [
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2],
-            [5, 2]
-        ]
-    ],
-    1, //playerToPly
-    [0, 0, 0, 0] // diceValues
-);
-recordGame("Ian", "Ian Chow Kin Hang", board); // Player 2 won
-redrawStats();
