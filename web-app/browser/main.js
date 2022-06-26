@@ -1,6 +1,7 @@
 import R from "./common/ramda.js";
 import Json_rpc from "./Json_rpc.js";
 import RoyalGameOfUr from "../common/RoyalGameOfUr.js";
+import StatsRGOU from "../server/StatsRGOU.js";
 
 // Look into preloading images with Promise
 // because there are quite a few images to load
@@ -417,3 +418,43 @@ const redrawStats = function () {
         });
     });
 };
+
+const board = RoyalGameOfUr.createBoard(
+    [
+        [
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0],
+            [4, 0]
+        ],
+        [
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2],
+            [5, 2]
+        ]
+    ],
+    1, //playerToPly
+    [0, 0, 0, 0] // diceValues
+);
+StatsRGOU.recordGame("Ian", "Justin", board); // Player 2 won
+const allPlayersStats = {
+    "Ian": 3,
+    "Justin": 0,
+    "Jeremy": 10,
+    "Pop": 20,
+    "Michael": 2,
+    "Felix": 6
+};
+StatsRGOU.addStats(allPlayersStats);
+console.log(StatsRGOU.getAllPlayersStats());
+StatsRGOU.clearStats();
+console.log(StatsRGOU.getAllPlayersStats());
+const top5Stats = StatsRGOU.getTop5Stats(allPlayersStats);
+console.log(StatsRGOU.getAllPlayersStats());
