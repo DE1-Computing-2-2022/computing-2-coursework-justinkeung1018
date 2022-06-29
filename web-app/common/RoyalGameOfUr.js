@@ -9,8 +9,6 @@ import R from "../common/ramda.js";
 
 const RoyalGameOfUr = Object.create(null);
 
-// const COLUMNS = 8;
-// const ROWS = 3;
 const PIECES_PER_PLAYER = 7;
 
 const COMBAT_ZONE = [
@@ -238,11 +236,6 @@ RoyalGameOfUr.tileIsRosette = function (vector) {
 RoyalGameOfUr.tileIsEmpty = function (vector) {
     return includesVector(EMPTY_TILES, vector);
 };
-
-/* Do something like this in the unit test
-player1Pieces[0] = [9,9];
-console.log(player1Pieces);
-*/
 
 /**
  * Makes a ply.
