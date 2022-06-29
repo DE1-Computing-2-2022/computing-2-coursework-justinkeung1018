@@ -1,7 +1,6 @@
 import R from "./common/ramda.js";
 import Json_rpc from "./Json_rpc.js";
 import RoyalGameOfUr from "../common/RoyalGameOfUr.js";
-import StatsRGOU from "../server/StatsRGOU.js";
 
 // Look into preloading images with Promise
 // because there are quite a few images to load
