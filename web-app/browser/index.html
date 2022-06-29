@@ -73,20 +73,19 @@
                 </div>
                 <div role="region" class="nav-screen__center-container" aria-label="Statistics of top 5 players">
                     <span class="nav-screen__heading">Top 5 players</span>
-                    <div class="stats-screen__table">
-                        <table>
+                    <div id="statsTableContainer" class="stats-screen__table-container">
+                        <table id="statsTable">
                             <thead>
                                 <tr>
                                     <th>Player</th>
                                     <th>Wins</th>
                                 </tr>
-                                <tr style="border-bottom: 3px solid white">
-    
-                                </tr>
+                                <tr style="border-bottom: 3px solid white"></tr>
                             </thead>
                             <tbody id="statsTableBody"></tbody>
                         </table>
                     </div>
+                    <span id="statsEmptyTableText" class="stats-screen__empty-table-text">No games have been played.</span>
                 </div>
                 <div class="nav-screen__side-container"></div>
             </div>

@@ -338,8 +338,45 @@ const redrawScreen = function (board) {
     enablePlayButton(board);
 };
 
+// Game statistics
+
+const getTop5Stats = Json_rpc.method("getTop5Stats");
+const recordGame = Json_rpc.method("recordGame");
+
+const redrawStats = function () {
+    const statsTableBody = document.getElementById("statsTableBody");
+    const statsTableContainer = document.getElementById("statsTableContainer");
+    const statsEmptyTableText = document.getElementById("statsEmptyTableText");
+    getTop5Stats().then(function (top5Stats) {
+        console.log(top5Stats);
+        if (top5Stats.length === 0) {
+            console.log(top5Stats.length);
+            statsTableContainer.style.display = "none";
+            statsEmptyTableText.style.display = "block";
+            return;
+        }
+        statsTableContainer.style.display = "block";
+        statsEmptyTableText.style.display = "none";
+        top5Stats.forEach(function (playerStats) {
+            const name = playerStats[0];
+            const wins = playerStats[1];
+            const row = document.createElement("tr");
+            const nameData = document.createElement("td");
+            const winsData = document.createElement("td");
+            nameData.textContent = name;
+            nameData.className = "name-column";
+            winsData.textContent = wins;
+            winsData.className = "wins-column";
+            row.append(nameData);
+            row.append(winsData);
+            statsTableBody.append(row);
+        });
+    });
+};
+
 // Setting up the game
 const initialBoard = RoyalGameOfUr.createBoard();
+redrawStats();
 drawTilesContainer();
 drawTiles();
 redrawPiecesAtHome(initialBoard);
@@ -391,29 +428,4 @@ const statsScreenBackButton = document.getElementById("statsScreenBackButton");
 statsScreenBackButton.onclick = function () {
     homeScreen.style.display = "flex";
     statsScreen.style.display = "none";
-};
-
-// Game statistics
-
-const getTop5Stats = Json_rpc.method("getTop5Stats");
-const recordGame = Json_rpc.method("recordGame");
-
-const redrawStats = function () {
-    const statsTableBody = document.getElementById("statsTableBody");
-    getTop5Stats().then(function (top5Stats) {
-        top5Stats.forEach(function (playerStats) {
-            const name = playerStats[0];
-            const wins = playerStats[1];
-            const row = document.createElement("tr");
-            const nameData = document.createElement("td");
-            const winsData = document.createElement("td");
-            nameData.textContent = name;
-            nameData.className = "name-column";
-            winsData.textContent = wins;
-            winsData.className = "wins-column";
-            row.append(nameData);
-            row.append(winsData);
-            statsTableBody.append(row);
-        });
-    });
 };

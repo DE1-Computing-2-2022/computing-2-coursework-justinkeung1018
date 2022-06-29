@@ -347,7 +347,15 @@ h3 {
     justify-content: center;
 }
 
-.stats-screen__table {
+.stats-screen__empty-table-text {
+    font-size: 42px;
+    font-weight: 400;
+    font-style: italic;
+    color: white;
+    display: none;
+}
+
+.stats-screen__table-container {
     border: 3px solid white;
     padding: 10px 20px;
 }
@@ -414,9 +422,11 @@ tbody td {
 /* "Player" column */
 thead th:nth-child(1), .name-column {
     text-align: left;
+    padding-right: 20px;
 }
 
 /* "Wins" column */
 thead th:nth-child(2), .wins-column {
     text-align: right;
+    padding-left: 20px;
 }
