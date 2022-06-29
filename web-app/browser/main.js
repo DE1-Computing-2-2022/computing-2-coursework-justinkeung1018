@@ -348,9 +348,7 @@ const redrawStats = function () {
     const statsTableContainer = document.getElementById("statsTableContainer");
     const statsEmptyTableText = document.getElementById("statsEmptyTableText");
     getTop5Stats().then(function (top5Stats) {
-        console.log(top5Stats);
         if (top5Stats.length === 0) {
-            console.log(top5Stats.length);
             statsTableContainer.style.display = "none";
             statsEmptyTableText.style.display = "block";
             return;
