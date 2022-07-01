@@ -3,6 +3,9 @@
 
 This is the submission template for your Computing 2 Applications coursework submission.
 
+## Notes
+When a player rolls a 0, the player cannot move any of the pieces and the turn is immediately passed to the next player. In the web app implementation this means the panel of the opponent immediately lights up (and the panel of the player immediately grays out) after pressing the roll button. However, this behavior is also observed when the player rolls a non-zero number, but none of the pieces can move by that number -- for instance, when the only piece on the board is on the last tile of the player's path, and the player rolls a 2. While this is perfectly in line with the game mechanism (passing the turn to the opponent if the current player cannot make any valid moves), users may not be able to distinguish between whether they rolled a 0 or rolled a non-zero number but do not have any valid moves.
+
 ## Checklist
 ### Install dependencies locally
 This template relies on a a few packages from the Node Package Manager, npm.
